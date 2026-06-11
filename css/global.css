@@ -99,3 +99,87 @@ textarea {
 .text-muted-custom {
     color: var(--muted);
 }
+
+.app-header{
+    height:72px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 24px;
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.brand-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-size:1.3rem;
+    font-weight:700;
+
+    color:var(--primary);
+}
+
+.sidebar{
+    width:280px;
+    min-height:calc(100vh - 72px);
+
+    background:#fff;
+
+    border-right:1px solid var(--border);
+
+    flex-direction:column;
+}
+
+.sidebar-menu{
+    padding:24px 16px;
+}
+
+.sidebar-link{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:14px 16px;
+
+    border-radius:12px;
+
+    color:var(--text);
+
+    transition:0.3s;
+}
+
+.sidebar-link:hover{
+    background:var(--primary-soft);
+    color:var(--primary);
+}
+
+.profile-button{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.profile-avatar{
+    width:38px;
+    height:38px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-weight:700;
+}

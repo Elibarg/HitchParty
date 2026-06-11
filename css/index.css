@@ -206,12 +206,34 @@
 }
 
 @media (max-width: 991.98px) {
+
+    .login-shell .row {
+        margin: 0;
+    }
+
     .login-brand-panel {
-        min-height: 42vh;
+        min-height: 45vh;
+        width: 100%;
+        padding: 2rem;
+    }
+
+    .brand-card {
+        max-width: 100%;
+    }
+
+    .illustration-bg {
+        left: 0;
+        right: 0;
+    }
+
+    .login-form-panel {
+        padding: 0;
     }
 
     .login-card {
-        max-width: 520px;
+        max-width: 100%;
+        border-radius: 32px 32px 0 0;
+        margin-top: -20px;
     }
 }
 
