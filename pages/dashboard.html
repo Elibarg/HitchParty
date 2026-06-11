@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | HitchParty</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+
+</head>
+
+<body>
+
+    <!-- Header carregado por componente -->
+    <div id="header-slot"></div>
+
+    <main class="dashboard-page">
+
+        <section class="welcome-card">
+
+            <p class="welcome-label">Olá,</p>
+            <h1 id="userName">Usuário</h1>
+
+            <p class="welcome-text">
+                Veja suas caronas, explore rotas e organize sua próxima viagem.
+            </p>
+
+            <a href="search.html" class="btn btn-primary w-100 search-btn">
+                Buscar caronas
+            </a>
+
+        </section>
+
+        <section class="stats-section">
+
+            <div class="section-header">
+                <h2>Resumo</h2>
+            </div>
+
+            <div class="stats-grid">
+
+                <article class="stat-card stat-blue">
+                    <span class="stat-value" id="ridesCount">0</span>
+                    <span class="stat-label">Caronas</span>
+                </article>
+
+                <article class="stat-card stat-green">
+                    <span class="stat-value" id="vehiclesCount">0</span>
+                    <span class="stat-label">Veículos</span>
+                </article>
+
+                <article class="stat-card stat-orange">
+                    <span class="stat-value" id="messagesCount">0</span>
+                    <span class="stat-label">Mensagens</span>
+                </article>
+
+                <article class="stat-card stat-purple">
+                    <span class="stat-value" id="ratingValue">0.0</span>
+                    <span class="stat-label">Avaliação</span>
+                </article>
+
+            </div>
+
+        </section>
+
+        <section class="actions-section">
+
+            <div class="section-header">
+                <h2>Ações rápidas</h2>
+            </div>
+
+            <div class="actions-grid">
+
+                <a href="create-ride.html" class="action-card action-blue">
+                    <span class="action-title">Criar carona</span>
+                    <span class="action-text">Publique um novo trajeto</span>
+                </a>
+
+                <a href="vehicles.html" class="action-card action-green">
+                    <span class="action-title">Meus veículos</span>
+                    <span class="action-text">Gerencie seus carros</span>
+                </a>
+                <a href="profile.html" class="action-card action-orange">
+                    <span class="action-title">Perfil</span>
+                    <span class="action-text">Atualize seus dados</span>
+                </a>
+                <a href="settings.html" class="action-card action-purple">
+                    <span class="action-title">Configurações</span>
+                    <span class="action-text">Preferências da conta</span>
+                </a>
+            </div>
+        </section>
+        <section class="rides-section">
+            <div class="section-header">
+                <h2>Próximas caronas</h2>
+                <a href="search.html">Ver todas</a>
+            </div>
+            <div id="upcomingRidesList" class="rides-list">
+                <!-- Renderizado pelo JS -->
+            </div>
+        </section>
+        <section class="activity-section">
+            <div class="section-header">
+                <h2>Atividade recente</h2>
+            </div>
+            <div id="recentActivityList" class="activity-list">
+                <!-- Renderizado pelo JS -->
+            </div>
+        </section>
+    </main>
+    <!-- Navbar carregada por componente -->
+    <div id="navbar-slot"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>

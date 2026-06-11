@@ -1,0 +1,285 @@
+.dashboard-page {
+    padding: 1rem 1rem 6.5rem;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--white);
+    border-radius: 24px;
+    padding: 1.25rem;
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.18);
+    margin-bottom: 1rem;
+}
+
+.welcome-label {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+.welcome-card h1 {
+    margin: 0.25rem 0 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.welcome-text {
+    margin-bottom: 1rem;
+    opacity: 0.95;
+    font-size: 0.95rem;
+}
+
+.search-btn {
+    min-height: 48px;
+    border-radius: 14px;
+    font-weight: 600;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1.25rem 0 0.75rem;
+}
+
+.section-header h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+.section-header a {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.stat-card {
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-height: 92px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+.stat-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+/* Cores dos cards de resumo */
+.stat-blue {
+    background: linear-gradient(135deg, #c8dcf5, #dbeafe);
+    color: #1d4ed8;
+}
+
+.stat-green {
+    background: linear-gradient(135deg, #adf5d3, #d1fae5);
+    color: #15803d;
+}
+
+.stat-orange {
+    background: linear-gradient(135deg, #fce3c7, #fdefde);
+    color: #c2410c;
+}
+
+.stat-purple {
+    background: linear-gradient(135deg, #d0c7fc, #ede9fe);
+    color: #7c3aed;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.action-card {
+    display: block;
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    min-height: 104px;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-card:active {
+    transform: scale(0.98);
+}
+
+.action-title {
+    display: block;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+}
+
+.action-text {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+/* Cores dos cards de ação */
+.action-blue {
+    background: linear-gradient(135deg, #c8dcf5, #dbeafe);
+    color: #1d4ed8;
+}
+
+.action-green {
+    background: linear-gradient(135deg, #adf5d3, #d1fae5);
+    color: #15803d;
+}
+
+.action-orange {
+    background: linear-gradient(135deg, #fce3c7, #fdefde);
+    color: #c2410c;
+}
+
+.action-purple {
+    background: linear-gradient(135deg, #d0c7fc, #ede9fe);
+    color: #7c3aed;
+}
+
+/* Opção 2: caixas coloridas suaves nas caronas e atividades */
+.rides-list,
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.ride-card,
+.activity-card {
+    border-radius: 18px;
+    padding: 1rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.ride-card {
+    background: #c8dcf5;
+    border-color: #c8dcf5;
+}
+
+.activity-card {
+    background: #f7badb;
+    border-color: #f7badb;
+}
+
+.ride-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.ride-route {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--secondary-color);
+}
+
+.ride-meta,
+.activity-meta {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.ride-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: #2563eb;
+    color: #ffffff;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.ride-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.ride-price {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+}
+
+.ride-link {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.activity-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.activity-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--secondary-color);
+}
+
+.activity-empty,
+.rides-empty {
+    border-radius: 18px;
+    padding: 1rem;
+    color: var(--text-light);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.rides-empty {
+    background: #eff6ff;
+}
+
+.activity-empty {
+    background: #faf5ff;
+}
+
+@media (min-width: 768px) {
+    .dashboard-page {
+        max-width: 430px;
+        margin: 0 auto;
+    }
+}

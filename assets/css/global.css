@@ -36,3 +36,154 @@ button {
 .hidden {
     display: none !important;
 }
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.app-header {
+
+    background: white;
+
+    padding: 1rem;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+}
+
+.header-container {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.brand-logo {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 12px;
+
+    background: var(--primary-color);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: bold;
+
+}
+
+.brand h1 {
+
+    margin: 0;
+
+    font-size: 1rem;
+
+}
+
+.brand span {
+
+    font-size: 0.8rem;
+
+    color: var(--text-light);
+
+}
+
+.logout-btn {
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+
+}
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+
+.bottom-navbar {
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 70px;
+
+    background: white;
+
+    border-top: 1px solid #e5e7eb;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    z-index: 1000;
+
+}
+
+.nav-item {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 2px;
+
+    color: var(--text-light);
+
+    text-decoration: none;
+
+    font-size: 0.8rem;
+
+}
+
+.nav-item span {
+
+    font-size: 1.2rem;
+
+}
+
+.nav-item:hover {
+
+    color: var(--primary-color);
+
+}
