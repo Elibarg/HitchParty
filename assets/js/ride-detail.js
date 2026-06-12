@@ -36,14 +36,9 @@ async function loadComponents() {
 
 function bindActionButtons() {
     const requestSeatBtn = document.getElementById("requestSeatBtn");
-    const sendMessageBtn = document.getElementById("sendMessageBtn");
 
     if (requestSeatBtn) {
         requestSeatBtn.addEventListener("click", handleRequestSeat);
-    }
-
-    if (sendMessageBtn) {
-        sendMessageBtn.addEventListener("click", handleSendMessage);
     }
 }
 
@@ -127,7 +122,7 @@ function getMockRide(rideId) {
 
 function renderRide(ride) {
     document.getElementById("driverName").textContent = ride.driverName;
-    document.getElementById("driverRating").textContent = `⭐ ${ride.rating.toFixed(1)} • ${ride.trips} viagens`;
+    document.getElementById("driverRating").textContent = `⭐ ${Number(ride.rating).toFixed(1)} • ${ride.trips} viagens`;
 
     document.querySelector(".route-point.start").textContent = ride.origin;
     document.querySelector(".route-point.end").textContent = ride.destination;
@@ -149,6 +144,11 @@ function renderRide(ride) {
             .toUpperCase();
 
         avatar.textContent = initials;
+    }
+
+    const openChatBtn = document.getElementById("openChatBtn");
+    if (openChatBtn) {
+        openChatBtn.href = `chat.html?id=${ride.id}`;
     }
 }
 
@@ -191,56 +191,6 @@ async function handleRequestSeat() {
         button.disabled = false;
         button.classList.remove("is-loading");
         showToast("Erro ao solicitar vaga.", "danger");
-    }
-}
-
-async function handleSendMessage() {
-    const messageInput = document.getElementById("messageText");
-    const message = messageInput.value.trim();
-
-    if (!message) {
-        showToast("Digite uma mensagem antes de enviar.", "warning");
-        return;
-    }
-
-    try {
-        /*
-        BACKEND FUTURO
-
-        const rideId = new URLSearchParams(window.location.search).get("id");
-
-        const response = await fetch(`${APP_CONFIG.API_URL}/messages`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({
-                rideId,
-                message
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao enviar mensagem");
-        }
-        */
-
-        await new Promise(resolve => setTimeout(resolve, 900));
-
-        messageInput.value = "";
-
-        const modalElement = document.getElementById("messageModal");
-        const modal = bootstrap.Modal.getInstance(modalElement);
-
-        if (modal) {
-            modal.hide();
-        }
-
-        showToast("Mensagem enviada com sucesso.", "success");
-    } catch (error) {
-        console.error(error);
-        showToast("Erro ao enviar mensagem.", "danger");
     }
 }
 
