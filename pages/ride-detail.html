@@ -13,37 +13,28 @@
     <div id="header-slot"></div>
     <main class="ride-detail-page">
         <section class="driver-card">
-
             <div class="driver-avatar">
                 GS
             </div>
-
             <div class="driver-info">
-
                 <h2 id="driverName">
                     Motorista
                 </h2>
-
                 <p id="driverRating">
                     ⭐ 0.0 • 0 viagens
                 </p>
-
             </div>
         </section>
         <section class="route-card">
             <h3>Rota</h3>
             <div class="route-timeline">
-
                 <div class="route-point start">
                     Origem
                 </div>
-
                 <div class="route-line"></div>
-
                 <div class="route-point end">
                     Destino
                 </div>
-
             </div>
         </section>
         <section class="details-card">
@@ -68,6 +59,7 @@
                 <span>💰 Valor</span>
                 <strong id="price"></strong>
             </div>
+
         </section>
         <section class="notes-card">
             <h3>Observações</h3>
@@ -78,17 +70,107 @@
         <section class="action-buttons">
             <button
                 id="requestSeatBtn"
-                class="btn btn-primary w-100">
+                class="btn btn-primary w-100 request-btn">
                 Solicitar Vaga
             </button>
             <button
                 id="messageDriverBtn"
-                class="btn btn-outline-primary w-100">
-                Enviar Mensagem
+                class="btn btn-outline-primary w-100 message-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#messageModal">
+
+                Conversar com Motorista
             </button>
         </section>
     </main>
     <div id="navbar-slot"></div>
+    <!-- Modal de mensagem -->
+    <div
+        class="modal fade"
+        id="messageModal"
+        tabindex="-1"
+        aria-labelledby="messageModalLabel"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-card">
+                <div class="modal-header">
+                    <h5
+                        class="modal-title"
+                        id="messageModalLabel">
+
+                        Conversar com Motorista
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Fechar">
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <p class="modal-text">
+                        Escreva sua mensagem para o motorista.
+                    </p>
+
+                    <label for="messageText" class="form-label">
+                        Mensagem
+                    </label>
+                    <textarea
+                        id="messageText"
+                        class="form-control"
+                        rows="4"
+                        placeholder="Olá, ainda há vagas disponíveis?"></textarea>
+
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="sendMessageBtn">
+
+                        Enviar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Toast de feedback -->
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+        <div
+            id="feedbackToast"
+            class="toast align-items-center text-bg-success border-0"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">
+                    Ação concluída com sucesso.
+                </div>
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Fechar">
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/ride-detail.js"></script>
 </body>
