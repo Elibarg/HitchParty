@@ -1,0 +1,76 @@
+.settings-page {
+    padding: 1rem 1rem 6rem;
+    min-height: 100vh;
+    background: linear-gradient(
+        180deg,
+        #f8fbff 0%,
+        #f4f7fb 100%
+    );
+}
+
+.settings-card {
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 1rem;
+
+    margin-bottom: 1rem;
+
+    box-shadow:
+        0 8px 20px
+        rgba(15,23,42,.05);
+
+    border:
+        1px solid
+        rgba(148,163,184,.12);
+}
+
+.settings-card h2 {
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+    margin-bottom: 1rem;
+
+    color: var(--secondary-color);
+}
+
+.setting-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: .75rem 0;
+}
+
+.setting-item small {
+
+    display: block;
+
+    color: var(--text-light);
+}
+
+.save-settings-btn {
+
+    min-height: 52px;
+
+    border-radius: 14px;
+
+    font-weight: 700;
+}
+
+@media (min-width: 768px) {
+
+    .settings-page {
+
+        max-width: 430px;
+
+        margin: 0 auto;
+    }
+}

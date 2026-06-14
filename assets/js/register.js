@@ -68,10 +68,8 @@ async function handleRegister(event) {
         password
     };
 
-    try {
-        /*
-        BACKEND FUTURO
-
+  try {
+        // CÓDIGO REAL DA API
         const response = await fetch(`${APP_CONFIG.API_URL}/auth/register`, {
             method: "POST",
             headers: {
@@ -87,18 +85,13 @@ async function handleRegister(event) {
 
         const data = await response.json();
 
-        // se o backend devolver token:
-        // saveToken(data.token);
-        // window.location.href = "dashboard.html";
-        */
-
-        console.log("Cadastro enviado:", payload);
-
-        alert("Conta criada com sucesso.");
+        // O alerta verdadeiro que só aparece se a API responder com sucesso
+        alert("Conta criada com sucesso no Banco de Dados!");
 
         window.location.href = "login.html";
+
     } catch (error) {
-        console.error(error);
-        alert("Erro ao criar conta.");
+        console.error("Erro na requisição:", error);
+        alert(error.message);
     }
 }

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Configurações | HitchParty</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/settings.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="settings-page">
+
+        <section class="settings-card">
+
+            <h2>Notificações</h2>
+
+            <div class="setting-item">
+
+                <div>
+                    <strong>E-mail</strong>
+                    <small>Receber notificações por e-mail</small>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="emailNotifications">
+                </div>
+
+            </div>
+
+            <div class="setting-item">
+
+                <div>
+                    <strong>Push</strong>
+                    <small>Receber notificações no aplicativo</small>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="pushNotifications">
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="settings-card">
+
+            <h2>Privacidade</h2>
+
+            <div class="setting-item">
+
+                <div>
+                    <strong>Mostrar telefone</strong>
+                    <small>Exibir telefone aos passageiros</small>
+                </div>
+
+                <div class="form-check form-switch">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="showPhone">
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="settings-card">
+
+            <h2>Aplicativo</h2>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Tema
+                </label>
+
+                <select
+                    id="theme"
+                    class="form-select">
+
+                    <option value="light">
+                        Claro
+                    </option>
+
+                    <option value="dark">
+                        Escuro
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label class="form-label">
+                    Idioma
+                </label>
+
+                <select
+                    id="language"
+                    class="form-select">
+
+                    <option value="pt-BR">
+                        Português
+                    </option>
+
+                    <option value="en-US">
+                        English
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+        <section class="settings-card">
+
+            <h2>Segurança</h2>
+
+            <button
+                id="logoutAllBtn"
+                class="btn btn-outline-warning w-100 mb-3">
+
+                Encerrar Todas as Sessões
+
+            </button>
+
+            <button
+                id="deleteAccountBtn"
+                class="btn btn-outline-danger w-100">
+
+                Excluir Conta
+
+            </button>
+
+        </section>
+
+        <button
+            id="saveSettingsBtn"
+            class="btn btn-primary w-100 save-settings-btn">
+
+            Salvar Configurações
+
+        </button>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <!-- Modal Excluir Conta -->
+
+    <div
+        class="modal fade"
+        id="deleteAccountModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Excluir Conta
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    Esta ação não poderá ser desfeita.
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        id="confirmDeleteBtn"
+                        class="btn btn-danger">
+
+                        Excluir
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Toast -->
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+
+        <div
+            id="feedbackToast"
+            class="toast text-bg-success border-0">
+
+            <div class="d-flex">
+
+                <div
+                    id="toastMessage"
+                    class="toast-body">
+
+                    Configurações salvas.
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/settings.js"></script>
+
+</body>
+
+</html>

@@ -57,55 +57,49 @@ function setupSearchForm() {
 
 }
 
+/*
+ * FRONT-END: PÁGINA DE BUSCA (search.js)
+ * Lógica do lado do cliente para interagir com o Back-end e desenhar as viagens.
+ * FUNÇÃO: Lidar com o botão de busca
+ * Desencadeada quando o utilizador preenche o formulário e clica em "Buscar".
+ */
 async function handleSearch(event) {
-
     event.preventDefault();
 
-    /*
-    BACKEND FUTURO
+    // 1. Pegamos o que o utilizador digitou nos campos de texto
+    const origem = document.getElementById("origin").value;
+    const destino = document.getElementById("destination").value;
 
-    GET
+    try {
+        // 2. Preparamos o endereço base da nossa API
+        let urlBusca = `${APP_CONFIG.API_URL}/rides/search`;
 
-    /api/rides/search
+        // 3. Adicionamos os filtros na URL se o utilizador tiver digitado alguma coisa
+        // Exemplo: se digitou Joinville, a URL vira ".../search?origin=Joinville"
+        const parametros = new URLSearchParams();
+        if (origem) parametros.append("origin", origem);
+        if (destino) parametros.append("destination", destino);
 
-    */
-
-    loadMockRides();
-
-}
-
-function loadMockRides() {
-
-    const rides = [
-
-        {
-            id: 1,
-            driver: "Carlos Silva",
-            route:
-                "Joinville → Blumenau",
-            date:
-                "20/06/2026 - 07:10",
-            seats: 2,
-            price: "R$ 25,00"
-        },
-
-        {
-            id: 2,
-            driver: "Ana Souza",
-            route:
-                "Joinville → Curitiba",
-            date:
-                "21/06/2026 - 08:00",
-            seats: 3,
-            price: "R$ 40,00"
+        // Se houver parâmetros, colamos eles no final da URL com um "?"
+        if (parametros.toString()) {
+            urlBusca += `?${parametros.toString()}`;
         }
 
-    ];
+        console.log("A pedir caronas na URL:", urlBusca); // Só para você ver no console!
 
-    renderRides(rides);
+        // 4. Fazemos o pedido com a URL filtrada
+        const response = await fetch(urlBusca);
+        
+        if (!response.ok) throw new Error("Erro ao buscar as caronas.");
 
+        const rides = await response.json();
+        renderRides(rides);
+
+    } catch (error) {
+        console.error("[Front-end] Erro na busca de caronas:", error);
+        alert(error.message);
+    }
 }
-
 function renderRides(rides) {
 
     const container =
