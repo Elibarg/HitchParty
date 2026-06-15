@@ -3,6 +3,9 @@ document.addEventListener(
     initializeSettings
 );
 
+const SETTINGS_STORAGE_KEY =
+    "hitchparty_settings";
+
 async function initializeSettings() {
 
     if (!isAuthenticated()) {
@@ -19,6 +22,10 @@ async function initializeSettings() {
 
     bindEvents();
 }
+
+/* =========================
+   COMPONENTES
+========================= */
 
 async function loadComponents() {
 
@@ -39,66 +46,39 @@ async function loadComponents() {
 
         ]);
 
-        document.getElementById(
-            "header-slot"
-        ).innerHTML =
-            await headerResponse.text();
+        if (headerResponse.ok) {
 
-        document.getElementById(
-            "navbar-slot"
-        ).innerHTML =
-            await navbarResponse.text();
+            document.getElementById(
+                "header-slot"
+            ).innerHTML =
+                await headerResponse.text();
+
+        }
+
+        if (navbarResponse.ok) {
+
+            document.getElementById(
+                "navbar-slot"
+            ).innerHTML =
+                await navbarResponse.text();
+
+        }
 
     }
     catch(error) {
 
-        console.error(error);
+        console.error(
+            "Erro ao carregar componentes:",
+            error
+        );
 
     }
 
 }
 
-function loadSettings() {
-
-    const settings =
-        JSON.parse(
-            localStorage.getItem(
-                "hitchparty_settings"
-            )
-        ) || {
-
-            emailNotifications: true,
-            pushNotifications: true,
-            showPhone: true,
-            theme: "light",
-            language: "pt-BR"
-        };
-
-    document.getElementById(
-        "emailNotifications"
-    ).checked =
-        settings.emailNotifications;
-
-    document.getElementById(
-        "pushNotifications"
-    ).checked =
-        settings.pushNotifications;
-
-    document.getElementById(
-        "showPhone"
-    ).checked =
-        settings.showPhone;
-
-    document.getElementById(
-        "theme"
-    ).value =
-        settings.theme;
-
-    document.getElementById(
-        "language"
-    ).value =
-        settings.language;
-}
+/* =========================
+   EVENTOS
+========================= */
 
 function bindEvents() {
 
@@ -113,55 +93,129 @@ function bindEvents() {
 
     document
         .getElementById(
-            "deleteAccountBtn"
-        )
-        .addEventListener(
-            "click",
-            openDeleteModal
-        );
-
-    document
-        .getElementById(
-            "confirmDeleteBtn"
-        )
-        .addEventListener(
-            "click",
-            deleteAccount
-        );
-
-    document
-        .getElementById(
             "logoutAllBtn"
         )
         .addEventListener(
             "click",
             logoutAllSessions
         );
+
+    document
+        .getElementById(
+            "deleteAccountBtn"
+        )
+        .addEventListener(
+            "click",
+            confirmDeleteAccount
+        );
 }
+
+/* =========================
+   CARREGAR CONFIGURAÇÕES
+========================= */
+
+function loadSettings() {
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                SETTINGS_STORAGE_KEY
+            )
+        ) || getDefaultSettings();
+
+    document.getElementById(
+        "newRequests"
+    ).checked =
+        settings.newRequests;
+
+    document.getElementById(
+        "rideApproval"
+    ).checked =
+        settings.rideApproval;
+
+    document.getElementById(
+        "rideCancellation"
+    ).checked =
+        settings.rideCancellation;
+
+    document.getElementById(
+        "chatNotifications"
+    ).checked =
+        settings.chatNotifications;
+
+    document.getElementById(
+        "tripReminders"
+    ).checked =
+        settings.tripReminders;
+
+    document.getElementById(
+        "showRating"
+    ).checked =
+        settings.showRating;
+
+    document.getElementById(
+        "sharePhone"
+    ).checked =
+        settings.sharePhone;
+
+    document.getElementById(
+        "publicPhoto"
+    ).checked =
+        settings.publicPhoto;
+
+    document.getElementById(
+        "language"
+    ).value =
+        settings.language;
+}
+
+/* =========================
+   SALVAR CONFIGURAÇÕES
+========================= */
 
 function saveSettings() {
 
     const settings = {
 
-        emailNotifications:
+        newRequests:
             document.getElementById(
-                "emailNotifications"
+                "newRequests"
             ).checked,
 
-        pushNotifications:
+        rideApproval:
             document.getElementById(
-                "pushNotifications"
+                "rideApproval"
             ).checked,
 
-        showPhone:
+        rideCancellation:
             document.getElementById(
-                "showPhone"
+                "rideCancellation"
             ).checked,
 
-        theme:
+        chatNotifications:
             document.getElementById(
-                "theme"
-            ).value,
+                "chatNotifications"
+            ).checked,
+
+        tripReminders:
+            document.getElementById(
+                "tripReminders"
+            ).checked,
+
+        showRating:
+            document.getElementById(
+                "showRating"
+            ).checked,
+
+        sharePhone:
+            document.getElementById(
+                "sharePhone"
+            ).checked,
+
+        publicPhoto:
+            document.getElementById(
+                "publicPhoto"
+            ).checked,
 
         language:
             document.getElementById(
@@ -170,68 +224,219 @@ function saveSettings() {
     };
 
     localStorage.setItem(
-        "hitchparty_settings",
-        JSON.stringify(settings)
+        SETTINGS_STORAGE_KEY,
+        JSON.stringify(
+            settings
+        )
     );
-
-    showToast(
-        "Configurações salvas com sucesso."
-    );
-}
-
-function logoutAllSessions() {
 
     /*
     BACKEND FUTURO
 
-    POST /api/auth/logout-all
+    PUT /api/settings
+
+    body:
+    {
+        newRequests,
+        rideApproval,
+        rideCancellation,
+        chatNotifications,
+        tripReminders,
+        showRating,
+        sharePhone,
+        publicPhoto,
+        language
+    }
 
     */
 
     showToast(
-        "Todas as sessões foram encerradas."
+        "Configurações salvas com sucesso.",
+        "success"
     );
 }
 
-function openDeleteModal() {
+/* =========================
+   CONFIGURAÇÕES PADRÃO
+========================= */
 
-    const modal =
-        new bootstrap.Modal(
-            document.getElementById(
-                "deleteAccountModal"
-            )
+function getDefaultSettings() {
+
+    return {
+
+        newRequests: true,
+
+        rideApproval: true,
+
+        rideCancellation: true,
+
+        chatNotifications: false,
+
+        tripReminders: true,
+
+        showRating: true,
+
+        sharePhone: true,
+
+        publicPhoto: true,
+
+        language: "pt-BR"
+    };
+}
+
+/* =========================
+   ENCERRAR SESSÕES
+========================= */
+
+async function logoutAllSessions() {
+
+    try {
+
+        /*
+        BACKEND FUTURO
+
+        POST /api/auth/logout-all
+
+        */
+
+        await fakeDelay();
+
+        showToast(
+            "Todas as sessões foram encerradas.",
+            "success"
         );
 
-    modal.show();
+    }
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Erro ao encerrar sessões.",
+            "danger"
+        );
+
+    }
+
 }
 
-function deleteAccount() {
+/* =========================
+   EXCLUIR CONTA
+========================= */
 
-    /*
-    BACKEND FUTURO
+function confirmDeleteAccount() {
 
-    DELETE /api/users/me
+    const confirmed =
+        confirm(
+            "Tem certeza que deseja excluir sua conta?"
+        );
 
-    */
+    if (!confirmed) {
 
-    localStorage.clear();
+        return;
+    }
 
-    window.location.href =
-        "login.html";
+    deleteAccount();
 }
 
-function showToast(message) {
+async function deleteAccount() {
 
-    document.getElementById(
-        "toastMessage"
-    ).textContent = message;
+    try {
+
+        /*
+        BACKEND FUTURO
+
+        DELETE /api/users/me
+
+        */
+
+        await fakeDelay();
+
+        localStorage.clear();
+
+        showToast(
+            "Conta removida.",
+            "success"
+        );
+
+        setTimeout(() => {
+
+            window.location.href =
+                "login.html";
+
+        }, 1500);
+
+    }
+    catch(error) {
+
+        console.error(error);
+
+        showToast(
+            "Erro ao excluir conta.",
+            "danger"
+        );
+
+    }
+
+}
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(
+    message,
+    variant = "success"
+) {
+
+    const toastElement =
+        document.getElementById(
+            "feedbackToast"
+        );
+
+    const toastMessage =
+        document.getElementById(
+            "toastMessage"
+        );
+
+    toastMessage.textContent =
+        message;
+
+    toastElement.classList.remove(
+        "text-bg-success",
+        "text-bg-danger",
+        "text-bg-warning",
+        "text-bg-info"
+    );
+
+    toastElement.classList.add(
+        `text-bg-${variant}`
+    );
 
     const toast =
-        bootstrap.Toast.getOrCreateInstance(
-            document.getElementById(
-                "feedbackToast"
-            )
-        );
+        bootstrap.Toast
+            .getOrCreateInstance(
+                toastElement,
+                {
+                    delay: 3000
+                }
+            );
 
     toast.show();
+}
+
+/* =========================
+   UTILITÁRIOS
+========================= */
+
+function fakeDelay() {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                600
+            )
+    );
+
 }

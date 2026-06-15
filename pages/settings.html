@@ -4,15 +4,30 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Configurações | HitchParty</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>
+        Configurações | HitchParty
+    </title>
 
-    <link rel="stylesheet" href="../assets/css/variables.css">
-    <link rel="stylesheet" href="../assets/css/global.css">
-    <link rel="stylesheet" href="../assets/css/settings.css">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/settings.css">
 
 </head>
 
@@ -22,141 +37,381 @@
 
     <main class="settings-page">
 
-        <section class="settings-card">
+        <!-- NOTIFICAÇÕES -->
 
-            <h2>Notificações</h2>
+        <section class="settings-section">
 
-            <div class="setting-item">
+            <h2 class="settings-title">
+                PREFERÊNCIAS DE NOTIFICAÇÃO
+            </h2>
 
-                <div>
-                    <strong>E-mail</strong>
-                    <small>Receber notificações por e-mail</small>
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Novas solicitações
+                        </h3>
+
+                        <p>
+                            Avisar quando alguém solicitar uma vaga
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="newRequests"
+                            checked>
+
+                    </div>
+
                 </div>
 
-                <div class="form-check form-switch">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="emailNotifications">
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Aprovação de carona
+                        </h3>
+
+                        <p>
+                            Avisar quando sua vaga for aprovada
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="rideApproval"
+                            checked>
+
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="setting-row">
 
-            <div class="setting-item">
+                    <div>
 
-                <div>
-                    <strong>Push</strong>
-                    <small>Receber notificações no aplicativo</small>
+                        <h3>
+                            Cancelamentos
+                        </h3>
+
+                        <p>
+                            Avisar sobre caronas canceladas
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="rideCancellation"
+                            checked>
+
+                    </div>
+
                 </div>
 
-                <div class="form-check form-switch">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="pushNotifications">
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Mensagens
+                        </h3>
+
+                        <p>
+                            Receber notificações de chat
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="chatNotifications">
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Lembretes de viagem
+                        </h3>
+
+                        <p>
+                            Lembrete 1h antes da carona
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="tripReminders"
+                            checked>
+
+                    </div>
+
                 </div>
 
             </div>
 
         </section>
 
-        <section class="settings-card">
+        <!-- PRIVACIDADE -->
 
-            <h2>Privacidade</h2>
+        <section class="settings-section">
 
-            <div class="setting-item">
+            <h2 class="settings-title">
+                PRIVACIDADE
+            </h2>
 
-                <div>
-                    <strong>Mostrar telefone</strong>
-                    <small>Exibir telefone aos passageiros</small>
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Mostrar avaliação publicamente
+                        </h3>
+
+                        <p>
+                            Sua nota aparece para outros usuários
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="showRating"
+                            checked>
+
+                    </div>
+
                 </div>
 
-                <div class="form-check form-switch">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="showPhone">
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Compartilhar telefone após aprovação
+                        </h3>
+
+                        <p>
+                            Seu número só fica visível após aprovação
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="sharePhone"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Foto de perfil pública
+                        </h3>
+
+                        <p>
+                            Outros usuários podem ver sua foto
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="publicPhoto"
+                            checked>
+
+                    </div>
+
                 </div>
 
             </div>
 
         </section>
 
-        <section class="settings-card">
+        <!-- APLICATIVO -->
 
-            <h2>Aplicativo</h2>
+        <section class="settings-section">
 
-            <div class="mb-3">
+            <h2 class="settings-title">
+                APLICATIVO
+            </h2>
 
-                <label class="form-label">
-                    Tema
-                </label>
+            <div class="settings-card">
 
-                <select
-                    id="theme"
-                    class="form-select">
+                <div class="setting-select">
 
-                    <option value="light">
-                        Claro
-                    </option>
+                    <label>
+                        Idioma
+                    </label>
 
-                    <option value="dark">
-                        Escuro
-                    </option>
+                    <select
+                        id="language"
+                        class="form-select">
 
-                </select>
+                        <option value="pt-BR">
+                            🇧🇷 Português
+                        </option>
 
-            </div>
+                        <option value="en-US">
+                            🇺🇸 English
+                        </option>
 
-            <div>
+                    </select>
 
-                <label class="form-label">
-                    Idioma
-                </label>
-
-                <select
-                    id="language"
-                    class="form-select">
-
-                    <option value="pt-BR">
-                        Português
-                    </option>
-
-                    <option value="en-US">
-                        English
-                    </option>
-
-                </select>
+                </div>
 
             </div>
 
         </section>
 
-        <section class="settings-card">
+        <!-- SOBRE -->
 
-            <h2>Segurança</h2>
+        <section class="settings-section">
 
-            <button
-                id="logoutAllBtn"
-                class="btn btn-outline-warning w-100 mb-3">
+            <h2 class="settings-title">
+                SOBRE
+            </h2>
 
-                Encerrar Todas as Sessões
+            <div class="settings-card">
 
-            </button>
+                <div class="about-row">
 
-            <button
-                id="deleteAccountBtn"
-                class="btn btn-outline-danger w-100">
+                    <span>
+                        Versão
+                    </span>
 
-                Excluir Conta
+                    <strong>
+                        1.0.0
+                    </strong>
 
-            </button>
+                </div>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#termsModal">
+
+                    <span>
+                        Termos de Uso
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#privacyModal">
+
+                    <span>
+                        Política de Privacidade
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#supportModal">
+
+                    <span>
+                        Suporte
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- CONTA -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                CONTA
+            </h2>
+
+            <div class="settings-card">
+
+                <button
+                    id="logoutAllBtn"
+                    class="btn btn-outline-warning w-100 mb-3">
+
+                    Encerrar Todas as Sessões
+
+                </button>
+
+                <button
+                    id="deleteAccountBtn"
+                    class="btn btn-outline-danger w-100">
+
+                    Excluir Conta
+
+                </button>
+
+            </div>
 
         </section>
 
         <button
             id="saveSettingsBtn"
-            class="btn btn-primary w-100 save-settings-btn">
+            class="btn btn-primary w-100 save-btn">
 
             Salvar Configurações
 
@@ -166,21 +421,21 @@
 
     <div id="navbar-slot"></div>
 
-    <!-- Modal Excluir Conta -->
+    <!-- MODAL TERMOS -->
 
     <div
         class="modal fade"
-        id="deleteAccountModal"
+        id="termsModal"
         tabindex="-1">
 
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-scrollable">
 
             <div class="modal-content">
 
                 <div class="modal-header">
 
                     <h5 class="modal-title">
-                        Excluir Conta
+                        Termos de Uso
                     </h5>
 
                     <button
@@ -193,27 +448,10 @@
 
                 <div class="modal-body">
 
-                    Esta ação não poderá ser desfeita.
-
-                </div>
-
-                <div class="modal-footer">
-
-                    <button
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button
-                        id="confirmDeleteBtn"
-                        class="btn btn-danger">
-
-                        Excluir
-
-                    </button>
+                    <p>
+                        Os usuários do HitchParty devem respeitar as regras da plataforma,
+                        fornecer informações verdadeiras e utilizar o aplicativo de forma responsável.
+                    </p>
 
                 </div>
 
@@ -223,7 +461,92 @@
 
     </div>
 
-    <!-- Toast -->
+    <!-- MODAL PRIVACIDADE -->
+
+    <div
+        class="modal fade"
+        id="privacyModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Política de Privacidade
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        Seus dados são utilizados apenas para funcionamento do HitchParty e não são compartilhados sem autorização.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL SUPORTE -->
+
+    <div
+        class="modal fade"
+        id="supportModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Suporte
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        E-mail:
+                        suporte@hitchparty.com
+                    </p>
+
+                    <p>
+                        Atendimento:
+                        Segunda a Sexta,
+                        das 08:00 às 18:00.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
 
     <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
 
@@ -256,6 +579,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="../assets/js/app.js"></script>
+
     <script src="../assets/js/settings.js"></script>
 
 </body>
