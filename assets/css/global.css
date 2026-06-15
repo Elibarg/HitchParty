@@ -142,9 +142,10 @@ button {
 
     height: 70px;
 
-    background: white;
+    background: #ffffff;
 
-    border-top: 1px solid #e5e7eb;
+    border-top:
+        1px solid #e5e7eb;
 
     display: flex;
 
@@ -153,7 +154,6 @@ button {
     align-items: center;
 
     z-index: 1000;
-
 }
 
 .nav-item {
@@ -164,16 +164,18 @@ button {
 
     align-items: center;
 
-    justify-content: center;
-
-    gap: 2px;
-
-    color: var(--text-light);
-
     text-decoration: none;
 
-    font-size: 0.8rem;
+    color: #64748b;
 
+    font-size: 0.75rem;
+
+    gap: 4px;
+}
+
+.nav-icon {
+
+    font-size: 1.2rem;
 }
 
 .nav-item span {
