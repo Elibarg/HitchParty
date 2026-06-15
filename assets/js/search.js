@@ -15,7 +15,7 @@ async function initializeSearch() {
     }
 
     await loadComponents();
-
+    bindLogout();
     setupSearchForm();
 
     loadMockRides();
@@ -45,7 +45,18 @@ async function loadComponents() {
         await navbar.text();
 
 }
+function bindLogout() {
+    const logoutButton = document.getElementById("logoutButton");
 
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        removeToken();
+        localStorage.removeItem(APP_CONFIG.USER_KEY);
+        window.location.href = "login.html";
+    });
+}
 function setupSearchForm() {
 
     document

@@ -8,7 +8,7 @@ async function initializeDashboard() {
 
     await loadComponents();
     loadUserInfo();
-    bindLogout();
+    bindLogout(); 
     loadDashboardData();
 }
 

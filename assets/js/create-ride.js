@@ -16,7 +16,7 @@ async function initializeCreateRide() {
     await loadComponents();
 
     loadVehicles();
-
+    bindLogout();
     bindForm();
 }
 
@@ -100,7 +100,18 @@ function loadVehicles() {
     });
 
 }
+function bindLogout() {
+    const logoutButton = document.getElementById("logoutButton");
 
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        removeToken();
+        localStorage.removeItem(APP_CONFIG.USER_KEY);
+        window.location.href = "login.html";
+    });
+}
 function bindForm() {
 
     document
