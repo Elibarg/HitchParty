@@ -21,7 +21,7 @@ async function initializeRequests() {
     await loadComponents();
     bindLogout();
     loadRequests();
-
+    bindLogout();
     bindEvents();
 
     renderRequests();
@@ -103,6 +103,128 @@ function bindEvents() {
 
 }
 
+<<<<<<< HEAD
+=======
+/* =========================
+   DADOS
+========================= */
+
+function loadRequests() {
+
+    requests =
+        JSON.parse(
+            localStorage.getItem(
+                REQUESTS_STORAGE_KEY
+            )
+        ) || getMockRequests();
+
+}
+
+function bindLogout() {
+    const logoutButton = document.getElementById("logoutButton");
+
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        removeToken();
+        localStorage.removeItem(APP_CONFIG.USER_KEY);
+        window.location.href = "login.html";
+    });
+}
+
+function getMockRequests() {
+
+    return [
+
+        {
+            id: 1,
+
+            type: "received",
+
+            passenger:
+                "Gabriel",
+
+            origin:
+                "Joinville",
+
+            destination:
+                "Blumenau",
+
+            date:
+                "Hoje • 18:30",
+
+            status:
+                "pending"
+        },
+
+        {
+            id: 2,
+
+            type: "received",
+
+            passenger:
+                "Maria",
+
+            origin:
+                "Joinville",
+
+            destination:
+                "Curitiba",
+
+            date:
+                "Amanhã • 07:00",
+
+            status:
+                "pending"
+        },
+
+        {
+            id: 3,
+
+            type: "sent",
+
+            driver:
+                "Carlos",
+
+            origin:
+                "Joinville",
+
+            destination:
+                "Florianópolis",
+
+            date:
+                "20/06 • 08:00",
+
+            status:
+                "approved"
+        },
+
+        {
+            id: 4,
+
+            type: "sent",
+
+            driver:
+                "Pedro",
+
+            origin:
+                "Joinville",
+
+            destination:
+                "Itajaí",
+
+            date:
+                "22/06 • 14:00",
+
+            status:
+                "pending"
+        }
+
+    ];
+
+}
+>>>>>>> 43cc83fd25fa378975744bb4fb0585c59c37084a
 
 /* =========================
    ABAS

@@ -9,7 +9,7 @@ async function initializeDashboard() {
     await loadComponents();
     bindLogout();
     loadUserInfo();
-    bindLogout();
+    bindLogout(); 
     loadDashboardData();
 }
 

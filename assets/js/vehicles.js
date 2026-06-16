@@ -12,6 +12,7 @@ async function initializeVehicles() {
 
     await loadComponents();
     loadVehicles();
+    bindLogout();
     bindEvents();
     bindLogout();
     bindFieldRestrictions();
@@ -84,6 +85,19 @@ function bindFieldRestrictions() {
 function loadVehicles() {
     vehicles = JSON.parse(localStorage.getItem(VEHICLES_STORAGE_KEY)) || [];
     renderVehicles();
+}
+
+function bindLogout() {
+    const logoutButton = document.getElementById("logoutButton");
+
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        removeToken();
+        localStorage.removeItem(APP_CONFIG.USER_KEY);
+        window.location.href = "login.html";
+    });
 }
 
 function renderVehicles() {
