@@ -52,18 +52,7 @@ function loadCurrentUser() {
         console.warn("Não foi possível ler o usuário do storage:", error);
     }
 }
-function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
 
-    if (!logoutButton) return;
-
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
-        window.location.href = "login.html";
-    });
-}
 
 function loadConversation() {
     const rideId = new URLSearchParams(window.location.search).get("id");
