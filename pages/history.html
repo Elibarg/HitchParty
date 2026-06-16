@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Histórico | HitchParty
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/history.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="history-page">
+
+        <section class="page-header">
+
+            <h1>
+                Histórico
+            </h1>
+
+            <p>
+                Visualize suas viagens anteriores.
+            </p>
+
+        </section>
+
+        <div class="history-tabs">
+
+            <button
+                class="history-tab active"
+                data-tab="completed">
+
+                Concluídas
+
+            </button>
+
+            <button
+                class="history-tab"
+                data-tab="cancelled">
+
+                Canceladas
+
+            </button>
+
+        </div>
+
+        <section
+            id="completedTrips"
+            class="history-list">
+
+        </section>
+
+        <section
+            id="cancelledTrips"
+            class="history-list d-none">
+
+        </section>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+
+        <div
+            id="feedbackToast"
+            class="toast text-bg-success border-0">
+
+            <div class="d-flex">
+
+                <div
+                    id="toastMessage"
+                    class="toast-body">
+
+                    Histórico atualizado.
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+
+    <script src="../assets/js/history.js"></script>
+
+</body>
+
+</html>

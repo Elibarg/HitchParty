@@ -1,0 +1,251 @@
+/* =========================
+   PÁGINA
+========================= */
+
+.scan-page {
+
+    min-height: 100vh;
+
+    padding: 1rem 0.75rem 7rem;
+
+    background: #f5f7fb;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.scanner-card {
+
+    background: #ffffff;
+
+    border-radius: 24px;
+
+    padding: 1.5rem;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 10px 25px
+        rgba(15, 23, 42, 0.06);
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.scanner-header {
+
+    text-align: center;
+
+    margin-bottom: 2rem;
+}
+
+.scanner-header h1 {
+
+    margin: 0;
+
+    font-size: 1.6rem;
+
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.scanner-header p {
+
+    margin-top: 0.5rem;
+
+    color: #64748b;
+
+    font-size: 0.95rem;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.scanner-preview {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-bottom: 1.5rem;
+}
+
+/* =========================
+   ÁREA DE LEITURA
+========================= */
+
+.scanner-frame {
+
+    width: 280px;
+
+    height: 280px;
+
+    border: 4px solid var(--primary-color);
+
+    border-radius: 24px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(37,99,235,.03),
+            rgba(37,99,235,.08)
+        );
+}
+
+/* =========================
+   ANIMAÇÃO DE SCAN
+========================= */
+
+.scanner-frame::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 4px;
+
+    background: var(--primary-color);
+
+    animation: scannerMove 2s infinite linear;
+}
+
+@keyframes scannerMove {
+
+    0% {
+
+        top: 0;
+    }
+
+    50% {
+
+        top: calc(100% - 4px);
+    }
+
+    100% {
+
+        top: 0;
+    }
+
+}
+
+/* =========================
+   ÍCONE
+========================= */
+
+.scanner-icon {
+
+    font-size: 5rem;
+
+    color: var(--primary-color);
+
+    z-index: 2;
+}
+
+.scanner-icon i {
+
+    display: block;
+}
+
+/* =========================
+   TEXTO
+========================= */
+
+.scanner-info {
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 0.95rem;
+
+    margin-bottom: 1.5rem;
+
+    line-height: 1.5;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.scanner-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.75rem;
+}
+
+.scanner-actions .btn {
+
+    min-height: 54px;
+
+    border-radius: 14px;
+
+    font-weight: 700;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.scan-status {
+
+    text-align: center;
+
+    background: #ecfdf5;
+
+    color: #15803d;
+
+    border-radius: 14px;
+
+    padding: 0.9rem;
+
+    margin-top: 1rem;
+
+    font-weight: 700;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+
+    border-radius: 14px;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 768px) {
+
+    .scan-page {
+
+        max-width: 430px;
+
+        margin: 0 auto;
+    }
+
+}
