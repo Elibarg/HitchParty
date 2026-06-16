@@ -38,8 +38,6 @@ function isAuthenticated() {
     return !!getToken();
 
 }
-<<<<<<< HEAD
-
 
 function bindLogout() {
 
@@ -65,21 +63,5 @@ function bindLogout() {
             window.location.href =
                 "login.html";
         }
-    );
-
-=======
-function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
-
-    if (!logoutButton) return;
-
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
-
-        window.location.href = "login.html";
-    });
->>>>>>> 81b28584d430c66066f7e1d4a1cc007b9e66b9c1
+    )
 }
