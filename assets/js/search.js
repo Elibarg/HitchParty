@@ -15,10 +15,8 @@ async function initializeSearch() {
     }
 
     await loadComponents();
-
+    bindLogout();
     setupSearchForm();
-
-    loadMockRides();
 
 }
 
@@ -89,7 +87,7 @@ async function handleSearch(event) {
 
         // 4. Fazemos o pedido com a URL filtrada
         const response = await fetch(urlBusca);
-        
+
         if (!response.ok) throw new Error("Erro ao buscar as caronas.");
 
         const rides = await response.json();

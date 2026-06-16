@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", initializeProfile);
 
 let currentProfile = {
-    name: "Usuário",
+    fullName: "Usuário",
     email: "email@exemplo.com",
     phone: "(00) 00000-0000",
     ridesCount: 0,
@@ -120,12 +120,12 @@ async function handleSaveProfile() {
     const phoneInput = document.getElementById("editPhone");
     const passwordInput = document.getElementById("editPassword");
 
-    const name = nameInput.value.trim();
+    const fullName = nameInput.value.trim();
     const email = emailInput.value.trim();
     const phone = phoneInput.value.trim();
     const password = passwordInput.value;
 
-    if (!name || !email || !phone) {
+    if (!fullName || !email || !phone) {
         form.classList.add("was-validated");
         showToast("Preencha os campos obrigatórios.", "warning");
         return;
@@ -138,7 +138,7 @@ async function handleSaveProfile() {
     }
 
     const payload = {
-        name,
+        fullName,
         email,
         phone
     };
@@ -171,7 +171,7 @@ async function handleSaveProfile() {
 
         currentProfile = {
             ...currentProfile,
-            name,
+            fullName,
             email,
             phone
         };
@@ -180,7 +180,7 @@ async function handleSaveProfile() {
             APP_CONFIG.USER_KEY,
             JSON.stringify({
                 ...JSON.parse(localStorage.getItem(APP_CONFIG.USER_KEY) || "{}"),
-                name,
+                fullName,
                 email,
                 phone
             })

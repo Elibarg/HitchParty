@@ -7,34 +7,6 @@
  */
 
 /**
- * BANCO DE DADOS TEMPORÁRIO (Mock)
- * ----------------------------------------------------------------------------
- * Esta variável simula a tabela 'caronas' do banco de dados MySQL.
- * * [NOTA PARA A EQUIPE DE BANCO DE DADOS]: 
- * Quando o MySQL estiver configurado, apagaremos esta variável e 
- * substituiremos a busca por uma query real (ex: SELECT * FROM caronas).
- * O formato dos dados abaixo é o "contrato" exato que o Front-end espera receber.
- */
-const bancoCaronas = [
-    {
-        id: 1,
-        driver: "Carlos Silva",
-        route: "Joinville → Blumenau",
-        date: "20/06/2026 - 07:10",
-        seats: 2,
-        price: "R$ 25,00"
-    },
-    {
-        id: 2,
-        driver: "Ana Souza",
-        route: "Joinville → Curitiba",
-        date: "21/06/2026 - 08:00",
-        seats: 3,
-        price: "R$ 40,00"
-    }
-];
-
-/**
  * FUNÇÃO: Buscar Caronas (GET)
  * ----------------------------------------------------------------------------
  * Esta função é chamada sempre que o utilizador abre a página de busca.
@@ -45,31 +17,174 @@ const bancoCaronas = [
 /**
  * FUNÇÃO: Buscar Caronas (GET) com Filtros
  */
-const buscarCaronas = (req, res) => {
-    // 1. Lemos as variáveis que vieram na URL (req.query)
-    // O Front-end envia em inglês (origin, destination)
-    const { origin, destination } = req.query;
+const caronaService =
+    require('../services/caronaService');
 
-    // 2. Começamos com a lista completa de caronas
-    let resultadosFiltrados = bancoCaronas;
+async function buscarCaronas(req, res) {
 
-    // 3. Se o utilizador pesquisou por Origem, filtramos a lista
-    if (origin) {
-        // Transformamos tudo em minúsculas (toLowerCase) para que "Joinville" e "joinville" funcionem igual
-        resultadosFiltrados = resultadosFiltrados.filter(carona => 
-            carona.route.toLowerCase().includes(origin.toLowerCase())
-        );
+    try {
+
+        const caronas =
+            await caronaService
+                .buscarCaronas();
+
+        return res.status(200)
+            .json(caronas);
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        return res.status(500).json({
+            erro:
+                'Erro ao buscar caronas.'
+        });
+
     }
 
-    // 4. Se o utilizador pesquisou por Destino, filtramos o que sobrou
-    if (destination) {
-        resultadosFiltrados = resultadosFiltrados.filter(carona => 
-            carona.route.toLowerCase().includes(destination.toLowerCase())
-        );
+}
+
+
+
+// Importa a conexão com o banco de dados MySQL
+const pool = require('../config/database');
+
+/**
+ * Cria uma nova carona no sistema.
+ *
+ * Fluxo:
+ * 1. Recebe os dados enviados pelo frontend.
+ * 2. Valida os campos obrigatórios.
+ * 3. Salva a carona no MySQL.
+ * 4. Retorna sucesso ao usuário.
+ */
+const criarCarona = async (req, res) => {
+
+    try {
+
+        // Extrai os dados enviados pelo frontend
+        const {
+            motorista_id,
+            veiculo_id,
+
+            origem,
+            destino,
+
+            origem_lat,
+            origem_lng,
+
+            destino_lat,
+            destino_lng,
+
+            data_hora_saida,
+
+            vagas_total,
+
+            valor_sugerido,
+
+            descricao
+
+        } = req.body;
+
+        // ==================================================
+        // VALIDAÇÕES BÁSICAS
+        // ==================================================
+
+        if (!motorista_id) {
+            return res.status(400).json({
+                erro: 'Motorista não informado.'
+            });
+        }
+
+        if (!veiculo_id) {
+            return res.status(400).json({
+                erro: 'Veículo não informado.'
+            });
+        }
+
+        if (!origem || !destino) {
+            return res.status(400).json({
+                erro: 'Origem e destino são obrigatórios.'
+            });
+        }
+
+        // ==================================================
+        // COMANDO SQL
+        // ==================================================
+
+        const sql = `
+            INSERT INTO caronas (
+
+                motorista_id,
+                veiculo_id,
+
+                origem,
+                destino,
+
+                origem_lat,
+                origem_lng,
+
+                destino_lat,
+                destino_lng,
+
+                data_hora_saida,
+
+                vagas_total,
+                vagas_disponiveis,
+
+                valor_sugerido,
+                descricao
+
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        // Executa o INSERT no banco
+        const [resultado] = await pool.query(sql, [
+
+            motorista_id,
+            veiculo_id,
+
+            origem,
+            destino,
+
+            origem_lat,
+            origem_lng,
+
+            destino_lat,
+            destino_lng,
+
+            data_hora_saida,
+
+            vagas_total,
+            vagas_total, // inicia com todas as vagas livres
+
+            valor_sugerido,
+
+            descricao
+
+        ]);
+
+        // Retorna sucesso para o frontend
+        return res.status(201).json({
+
+            mensagem: 'Carona criada com sucesso!',
+
+            carona_id: resultado.insertId
+
+        });
+
+    }
+    catch (erro) {
+
+        console.error('Erro ao criar carona:', erro);
+
+        return res.status(500).json({
+            erro: 'Erro interno do servidor.'
+        });
+
     }
 
-    // 5. Devolvemos apenas as caronas que passaram pelos filtros!
-    return res.status(200).json(resultadosFiltrados);
 };
 
-module.exports = { buscarCaronas };
+module.exports = { buscarCaronas, criarCarona };

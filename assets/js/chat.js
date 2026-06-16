@@ -11,6 +11,7 @@ async function initializeChat() {
     }
 
     await loadComponents();
+    bindLogout();
     loadCurrentUser();
     loadConversation();
     bindChatForm();
@@ -54,87 +55,12 @@ function loadCurrentUser() {
 
 function loadConversation() {
     const rideId = new URLSearchParams(window.location.search).get("id");
-    currentRide = getMockRideAndChat(rideId);
 
     renderRideHeader(currentRide.ride);
     chatMessages = currentRide.messages;
     renderMessages();
 }
 
-function getMockRideAndChat(rideId) {
-    const mock = {
-        "1": {
-            ride: {
-                id: 1,
-                driverName: "Carlos Silva",
-                origin: "Joinville",
-                destination: "Blumenau",
-                date: "20/06/2026",
-                time: "07:10",
-                seats: 2
-            },
-            messages: [
-                {
-                    sender: "driver",
-                    text: "Olá! Ainda temos duas vagas disponíveis.",
-                    time: "07:05"
-                },
-                {
-                    sender: "me",
-                    text: "Ótimo. Gostaria de confirmar uma vaga.",
-                    time: "07:06"
-                },
-                {
-                    sender: "driver",
-                    text: "Perfeito, pode deixar reservado.",
-                    time: "07:07"
-                }
-            ]
-        },
-        "2": {
-            ride: {
-                id: 2,
-                driverName: "Ana Souza",
-                origin: "Joinville",
-                destination: "Curitiba",
-                date: "21/06/2026",
-                time: "08:00",
-                seats: 3
-            },
-            messages: [
-                {
-                    sender: "driver",
-                    text: "Bom dia! Saída às 08:00.",
-                    time: "08:10"
-                },
-                {
-                    sender: "me",
-                    text: "Tudo certo, obrigado!",
-                    time: "08:11"
-                }
-            ]
-        }
-    };
-
-    return mock[rideId] || {
-        ride: {
-            id: rideId || 0,
-            driverName: "Motorista",
-            origin: "Origem",
-            destination: "Destino",
-            date: "--/--/----",
-            time: "--:--",
-            seats: 0
-        },
-        messages: [
-            {
-                sender: "driver",
-                text: "Olá! Me diga como posso ajudar.",
-                time: "Agora"
-            }
-        ]
-    };
-}
 
 function renderRideHeader(ride) {
     document.getElementById("chatDriverName").textContent = ride.driverName;

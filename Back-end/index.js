@@ -1,41 +1,106 @@
-// Importamos as ferramentas principais que instalámos
-const express = require('express'); // O construtor do nosso servidor
-const cors = require('cors');       // O "porteiro" que permite que o front-end (browser) consiga conversar com este back-end sem ser bloqueado
+/**
+ * ============================================================================
+ * HITCHPARTY - SERVIDOR PRINCIPAL
+ * ============================================================================
+ * Este ficheiro é o ponto de entrada do backend.
+ * Aqui configuramos:
+ *
+ * - Express
+ * - CORS
+ * - Leitura de JSON
+ * - Rotas da aplicação
+ * - Ligação ao banco MySQL
+ * - Inicialização do servidor
+ * ============================================================================
+ */
 
-// Importamos o "mapa" de rotas que criámos
+// ============================================================================
+// IMPORTAÇÕES
+// ============================================================================
+
+// Framework principal do backend
+const express = require('express');
+
+// Middleware que permite comunicação entre Front-end e Back-end
+const cors = require('cors');
+
+// Rotas de autenticação
 const authRoutes = require('./src/routes/authRoutes');
 
-// Criamos a nossa aplicação servidor
+// Rotas relacionadas às caronas
+const caronasRotas = require('./src/routes/caronasRotas');
+
+// Pool de conexões MySQL
+const pool = require('./src/config/database');
+
+// ============================================================================
+// INICIALIZAÇÃO DO SERVIDOR
+// ============================================================================
+
 const app = express();
 
-// Configurações essenciais
-// Ativamos o porteiro para liberar os acessos
+// ============================================================================
+// MIDDLEWARES GLOBAIS
+// ============================================================================
+
+// Permite requisições vindas do navegador
 app.use(cors());
 
-// Ativamos um "tradutor" que ensina o servidor a ler as mensagens que chegam no formato JSON
-app.use(express.json()); 
+// Permite receber JSON no corpo das requisições
+app.use(express.json());
 
-// Ligamos as rotas ao endereço principal
-// Dizemos ao servidor: "Toda a mensagem que chegar para '/api/auth', envia para o ficheiro authRoutes.js tratar"
+// ============================================================================
+// REGISTRO DAS ROTAS
+// ============================================================================
+
+// Todas as URLs iniciadas por /api/auth
+// serão tratadas pelo módulo de autenticação
 app.use('/api/auth', authRoutes);
 
-// Definimos a porta (o "canal de rádio") onde o servidor vai ficar à escuta
+// Todas as URLs iniciadas por /api/rides
+// serão tratadas pelo módulo de caronas
+app.use('/api/rides', caronasRotas);
+
+// ============================================================================
+// TESTE DE CONEXÃO COM O MYSQL
+// ============================================================================
+
+async function testarBanco() {
+
+    try {
+
+        const conexao =
+            await pool.getConnection();
+
+        console.log(
+            '✅ MySQL conectado!'
+        );
+
+        conexao.release();
+
+    } catch (erro) {
+
+        console.error(
+            '❌ Erro MySQL:',
+            erro
+        );
+
+    }
+
+}
+
+testarBanco();
+
+// ============================================================================
+// INICIALIZAÇÃO DO SERVIDOR HTTP
+// ============================================================================
+
 const PORTA = 8080;
 
-// Ligamos o servidor!
 app.listen(PORTA, () => {
-    console.log(`🚀 Servidor do HitchParty ativo e a escutar na porta ${PORTA}.`);
+
+    console.log(
+        `🚀 Servidor do HitchParty ativo na porta ${PORTA}.`
+    );
+
 });
-
-
-// IMPORTAÇÃO DAS ROTAS
-const autenticacaoRotas = require('./src/routes/authRoutes');
-const caronasRotas = require('./src/routes/caronasRotas'); // <-- NOVA LINHA
-
-// LIGAÇÃO DAS ROTAS ÀS URLs PRINCIPAIS
-// O prefixo '/api/auth' direciona para o ficheiro de autenticação
-app.use('/api/auth', autenticacaoRotas);
-
-// O prefixo '/api/rides' direciona para o ficheiro de caronas.
-// Qualquer pedido que comece por '/api/rides' será tratado pelo 'caronasRotas'.
-app.use('/api/rides', caronasRotas); // <-- NOVA LINHA

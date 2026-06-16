@@ -7,6 +7,7 @@ async function initializeDashboard() {
     }
 
     await loadComponents();
+    bindLogout();
     loadUserInfo();
     bindLogout();
     loadDashboardData();
@@ -35,9 +36,8 @@ async function loadComponents() {
 }
 
 function loadUserInfo() {
-    const userNameElement = document.getElementById("userName");
+    const userNameElement = document.getElementById("fullName");
 
-    let userName = "Usuário";
 
     try {
         const storedUser = localStorage.getItem(APP_CONFIG.USER_KEY);
@@ -67,65 +67,7 @@ function bindLogout() {
 }
 
 function loadDashboardData() {
-    /*
-        BACKEND FUTURO
 
-        const response = await fetch(`${APP_CONFIG.API_URL}/dashboard`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        });
-
-        const data = await response.json();
-        renderDashboard(data);
-    */
-
-    const mockData = {
-        stats: {
-            ridesCount: 0,
-            vehiclesCount: 0,
-            messagesCount: 0,
-            ratingValue: 0.0
-        },
-        upcomingRides: [
-            {
-                route: "Centro → Bairro Sul",
-                date: "Hoje, 18:30",
-                seat: "2 vagas",
-                price: "R$ 12,00"
-            },
-            {
-                route: "Joinville → Blumenau",
-                date: "Amanhã, 07:10",
-                seat: "1 vaga",
-                price: "R$ 28,00"
-            },
-            {
-                route: "Universidade → Terminal",
-                date: "Sex, 12:20",
-                seat: "3 vagas",
-                price: "R$ 8,00"
-            }
-        ],
-        recentActivity: [
-            {
-                title: "Você recebeu uma nova solicitação",
-                meta: "há 12 min"
-            },
-            {
-                title: "Sua carona foi confirmada",
-                meta: "há 1 hora"
-            },
-            {
-                title: "Novo veículo adicionado",
-                meta: "ontem"
-            }
-        ]
-    };
-
-    renderStats(mockData.stats);
-    renderUpcomingRides(mockData.upcomingRides);
-    renderRecentActivity(mockData.recentActivity);
 }
 
 function renderStats(stats) {

@@ -1,5 +1,5 @@
 -- ==========================================
--- HITCHPARTY DATABASE
+-- HITCHPARTY DATABASE V2
 -- ==========================================
 
 DROP DATABASE IF EXISTS hitchparty;
@@ -11,233 +11,230 @@ COLLATE utf8mb4_unicode_ci;
 USE hitchparty;
 
 -- ==========================================
--- USUÁRIOS
+-- USERS
 -- ==========================================
 
-CREATE TABLE usuarios (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE users (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    nome VARCHAR(150) NOT NULL,
 
-    email VARCHAR(255) NOT NULL UNIQUE,
+full_name VARCHAR(150) NOT NULL,
+email VARCHAR(255) NOT NULL UNIQUE,
+password_hash VARCHAR(255) NOT NULL,
+phone VARCHAR(20),
+photo_url VARCHAR(500),
 
-    senha_hash VARCHAR(255) NOT NULL,
+email_verified BOOLEAN DEFAULT FALSE,
+rating_average DECIMAL(3,2) DEFAULT 0.00,
+is_active BOOLEAN DEFAULT TRUE,
 
-    telefone VARCHAR(20),
+last_login DATETIME NULL,
 
-    foto_url VARCHAR(500),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP
 
-    email_verificado BOOLEAN DEFAULT FALSE,
 
-    media_avaliacao DECIMAL(3,2) DEFAULT 0.00,
-
-    ativo BOOLEAN DEFAULT TRUE,
-
-    ultimo_login DATETIME NULL,
-
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- ==========================================
--- VEÍCULOS
+-- VEHICLES
 -- ==========================================
 
-CREATE TABLE veiculos (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE vehicles (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    usuario_id BIGINT NOT NULL,
 
-    marca VARCHAR(100) NOT NULL,
+user_id BIGINT NOT NULL,
 
-    modelo VARCHAR(100) NOT NULL,
+brand VARCHAR(100) NOT NULL,
+model VARCHAR(100) NOT NULL,
+license_plate VARCHAR(10) NOT NULL UNIQUE,
+color VARCHAR(50),
+year SMALLINT,
 
-    placa VARCHAR(10) NOT NULL UNIQUE,
+is_active BOOLEAN DEFAULT TRUE,
 
-    cor VARCHAR(50),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP,
 
-    ano SMALLINT,
+CONSTRAINT fk_vehicle_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 
-    ativo BOOLEAN DEFAULT TRUE,
 
-    ultimo_login DATETIME NULL,
-
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP,
-
-    CONSTRAINT fk_veiculo_usuario
-        FOREIGN KEY (usuario_id)
-        REFERENCES usuarios(id)
-        ON DELETE CASCADE
 );
 
 -- ==========================================
--- CARONAS
+-- RIDES
 -- ==========================================
 
-CREATE TABLE caronas (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE rides (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    motorista_id BIGINT NOT NULL,
 
-    veiculo_id BIGINT NOT NULL,
+driver_id BIGINT NOT NULL,
+vehicle_id BIGINT NOT NULL,
 
-    origem VARCHAR(255) NOT NULL,
+origin VARCHAR(255) NOT NULL,
+destination VARCHAR(255) NOT NULL,
 
-    destino VARCHAR(255) NOT NULL,
+origin_lat DECIMAL(10,8),
+origin_lng DECIMAL(11,8),
 
-    origem_lat DECIMAL(10,8),
+destination_lat DECIMAL(10,8),
+destination_lng DECIMAL(11,8),
 
-    origem_lng DECIMAL(11,8),
+distance_km DECIMAL(8,2),
+estimated_duration_minutes INT,
 
-    destino_lat DECIMAL(10,8),
+departure_time DATETIME NOT NULL,
 
-    destino_lng DECIMAL(11,8),
+total_seats INT NOT NULL,
+available_seats INT NOT NULL,
 
-    data_hora_saida DATETIME NOT NULL,
+suggested_price DECIMAL(10,2),
 
-    vagas_total INT NOT NULL,
+description TEXT,
 
-    vagas_disponiveis INT NOT NULL,
+status ENUM(
+    'SCHEDULED',
+    'IN_PROGRESS',
+    'FINISHED',
+    'CANCELED'
+) DEFAULT 'SCHEDULED',
 
-    valor_sugerido DECIMAL(10,2),
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    descricao TEXT NULL,
+CONSTRAINT fk_ride_driver
+    FOREIGN KEY (driver_id)
+    REFERENCES users(id),
 
-    status ENUM(
-        'AGENDADA',
-        'EM_ANDAMENTO',
-        'FINALIZADA',
-        'CANCELADA'
-    ) DEFAULT 'AGENDADA',
+CONSTRAINT fk_ride_vehicle
+    FOREIGN KEY (vehicle_id)
+    REFERENCES vehicles(id),
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT chk_ride_seats
+    CHECK (
+        total_seats > 0
+        AND total_seats <= 8
+        AND available_seats <= total_seats
+    )
 
-    CONSTRAINT fk_carona_motorista
-        FOREIGN KEY (motorista_id)
-        REFERENCES usuarios(id),
 
-    CONSTRAINT fk_carona_veiculo
-        FOREIGN KEY (veiculo_id)
-        REFERENCES veiculos(id),
-
-    CONSTRAINT chk_limite_vagas
-        CHECK (
-            vagas_total > 0
-            AND vagas_total <= 8
-            AND vagas_disponiveis <= vagas_total
-        )
 );
 
 -- ==========================================
--- SOLICITAÇÕES
+-- RIDE REQUESTS
 -- ==========================================
 
-CREATE TABLE solicitacoes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE ride_requests (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    carona_id BIGINT NOT NULL UNIQUE,
 
-    passageiro_id BIGINT NOT NULL,
+ride_id BIGINT NOT NULL,
+passenger_id BIGINT NOT NULL,
 
-    status ENUM(
-        'PENDENTE',
-        'ACEITA',
-        'RECUSADA',
-        'CANCELADA'
-    ) DEFAULT 'PENDENTE',
+status ENUM(
+    'PENDING',
+    'ACCEPTED',
+    'REJECTED',
+    'CANCELED'
+) DEFAULT 'PENDING',
 
-    observacao TEXT,
+notes TEXT,
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_solicitacao_carona
-        FOREIGN KEY (carona_id)
-        REFERENCES caronas(id)
-        ON DELETE CASCADE,
+CONSTRAINT fk_request_ride
+    FOREIGN KEY (ride_id)
+    REFERENCES rides(id)
+    ON DELETE CASCADE,
 
-    CONSTRAINT fk_solicitacao_passageiro
-        FOREIGN KEY (passageiro_id)
-        REFERENCES usuarios(id)
-        ON DELETE CASCADE,
+CONSTRAINT fk_request_passenger
+    FOREIGN KEY (passenger_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE,
 
-    CONSTRAINT uk_solicitacao
-        UNIQUE (carona_id, passageiro_id)
+CONSTRAINT uk_ride_request
+    UNIQUE (ride_id, passenger_id)
+
+
 );
 
 -- ==========================================
--- AVALIAÇÕES
+-- REVIEWS
 -- ==========================================
 
-CREATE TABLE avaliacoes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE reviews (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    carona_id BIGINT NOT NULL,
 
-    avaliador_id BIGINT NOT NULL,
+ride_id BIGINT NOT NULL,
 
-    avaliado_id BIGINT NOT NULL,
+reviewer_id BIGINT NOT NULL,
+reviewed_user_id BIGINT NOT NULL,
 
-    nota TINYINT NOT NULL,
+rating TINYINT NOT NULL,
+comment TEXT,
 
-    comentario TEXT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_review_ride
+    FOREIGN KEY (ride_id)
+    REFERENCES rides(id)
+    ON DELETE CASCADE,
 
-    CONSTRAINT fk_avaliacao_carona
-        FOREIGN KEY (carona_id)
-        REFERENCES caronas(id)
-        ON DELETE CASCADE,
+CONSTRAINT fk_review_reviewer
+    FOREIGN KEY (reviewer_id)
+    REFERENCES users(id),
 
-    CONSTRAINT fk_avaliador
-        FOREIGN KEY (avaliador_id)
-        REFERENCES usuarios(id),
+CONSTRAINT fk_reviewed_user
+    FOREIGN KEY (reviewed_user_id)
+    REFERENCES users(id),
 
-    CONSTRAINT fk_avaliado
-        FOREIGN KEY (avaliado_id)
-        REFERENCES usuarios(id),
+CONSTRAINT chk_rating
+    CHECK (rating BETWEEN 1 AND 5),
 
-    CONSTRAINT chk_nota
-        CHECK (nota BETWEEN 1 AND 5),
+CONSTRAINT chk_self_review
+    CHECK (reviewer_id <> reviewed_user_id)
 
-    CONSTRAINT chk_autoavaliacao
-        CHECK (avaliador_id <> avaliado_id)
+
 );
 
 -- ==========================================
--- CONFIGURAÇÕES DO USUÁRIO
+-- USER SETTINGS
 -- ==========================================
 
-CREATE TABLE configuracoes_usuario (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE user_settings (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    usuario_id BIGINT NOT NULL UNIQUE,
 
-    tema ENUM(
-        'CLARO',
-        'ESCURO'
-    ) DEFAULT 'CLARO',
+user_id BIGINT NOT NULL UNIQUE,
 
-    idioma VARCHAR(10)
-        DEFAULT 'pt-BR',
+theme ENUM(
+    'LIGHT',
+    'DARK'
+) DEFAULT 'LIGHT',
 
-    mostrar_telefone BOOLEAN DEFAULT FALSE,
+language VARCHAR(10)
+    DEFAULT 'en-US',
 
-    receber_email BOOLEAN DEFAULT TRUE,
+show_phone BOOLEAN DEFAULT FALSE,
+receive_email BOOLEAN DEFAULT TRUE,
+receive_push BOOLEAN DEFAULT TRUE,
 
-    receber_push BOOLEAN DEFAULT TRUE,
+CONSTRAINT fk_settings_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 
-    CONSTRAINT fk_config_usuario
-        FOREIGN KEY (usuario_id)
-        REFERENCES usuarios(id)
-        ON DELETE CASCADE
+
 );
 
 -- ==========================================
@@ -245,163 +242,169 @@ CREATE TABLE configuracoes_usuario (
 -- ==========================================
 
 CREATE TABLE qr_codes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    carona_id BIGINT NOT NULL,
 
-    codigo VARCHAR(255) NOT NULL UNIQUE,
+ride_id BIGINT NOT NULL,
 
-    validade DATETIME NOT NULL,
+code VARCHAR(255) NOT NULL UNIQUE,
 
-    utilizado BOOLEAN DEFAULT FALSE,
+expires_at DATETIME NOT NULL,
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+is_used BOOLEAN DEFAULT FALSE,
 
-    CONSTRAINT fk_qrcode_carona
-        FOREIGN KEY (carona_id)
-        REFERENCES caronas(id)
-        ON DELETE CASCADE
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+CONSTRAINT fk_qrcode_ride
+    FOREIGN KEY (ride_id)
+    REFERENCES rides(id)
+    ON DELETE CASCADE
+
+
 );
 
 -- ==========================================
--- NOTIFICAÇÕES
+-- NOTIFICATIONS
 -- ==========================================
 
-CREATE TABLE notificacoes (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE notifications (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    usuario_id BIGINT NOT NULL,
 
-    titulo VARCHAR(255) NOT NULL,
+user_id BIGINT NOT NULL,
 
-    mensagem TEXT NOT NULL,
+title VARCHAR(255) NOT NULL,
+message TEXT NOT NULL,
 
-    lida BOOLEAN DEFAULT FALSE,
+is_read BOOLEAN DEFAULT FALSE,
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_notificacao_usuario
-        FOREIGN KEY (usuario_id)
-        REFERENCES usuarios(id)
-        ON DELETE CASCADE
+CONSTRAINT fk_notification_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
+
+
 );
 
 -- ==========================================
--- PAGAMENTOS
+-- PAYMENTS
 -- ==========================================
 
-CREATE TABLE pagamentos (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE payments (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
-    solicitacao_id BIGINT NOT NULL,
+request_id BIGINT NOT NULL,
+ride_id BIGINT NOT NULL,
 
-    carona_id BIGINT NOT NULL,
+passenger_id BIGINT NOT NULL,
+driver_id BIGINT NOT NULL,
 
-    passageiro_id BIGINT NOT NULL,
+amount DECIMAL(10,2) NOT NULL,
 
-    motorista_id BIGINT NOT NULL,
+status ENUM(
+    'PENDING',
+    'PAID',
+    'HOLD',
+    'RELEASED',
+    'REFUNDED',
+    'CANCELED'
+) DEFAULT 'PENDING',
 
-    valor DECIMAL(10,2) NOT NULL,
+payment_method ENUM(
+    'PIX',
+    'CREDIT_CARD',
+    'DEBIT_CARD'
+) DEFAULT 'PIX',
 
-    status ENUM(
-        'PENDENTE',
-        'PAGO',
-        'RETIDO',
-        'LIBERADO',
-        'ESTORNADO',
-        'CANCELADO'
-    ) DEFAULT 'PENDENTE',
+receipt_url VARCHAR(500),
 
-    metodo_pagamento ENUM(
-        'PIX',
-        'CARTAO_CREDITO',
-        'CARTAO_DEBITO'
-    ) DEFAULT 'PIX',
+gateway_transaction VARCHAR(255),
 
-    comprovante VARCHAR(500),
+paid_at DATETIME NULL,
+released_at DATETIME NULL,
 
-    transacao_gateway VARCHAR(255) NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    data_pagamento DATETIME NULL,
+updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP,
 
-    data_liberacao DATETIME NULL,
+CONSTRAINT fk_payment_request
+    FOREIGN KEY (request_id)
+    REFERENCES ride_requests(id)
+    ON DELETE CASCADE,
 
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+CONSTRAINT fk_payment_ride
+    FOREIGN KEY (ride_id)
+    REFERENCES rides(id)
+    ON DELETE CASCADE,
 
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP,
+CONSTRAINT fk_payment_passenger
+    FOREIGN KEY (passenger_id)
+    REFERENCES users(id),
 
-    CONSTRAINT fk_pagamento_solicitacao
-        FOREIGN KEY (solicitacao_id)
-        REFERENCES solicitacoes(id)
-        ON DELETE CASCADE,
+CONSTRAINT fk_payment_driver
+    FOREIGN KEY (driver_id)
+    REFERENCES users(id),
 
-    CONSTRAINT fk_pagamento_carona
-        FOREIGN KEY (carona_id)
-        REFERENCES caronas(id)
-        ON DELETE CASCADE,
+CONSTRAINT chk_payment_amount
+    CHECK (amount > 0)
 
-    CONSTRAINT fk_pagamento_passageiro
-        FOREIGN KEY (passageiro_id)
-        REFERENCES usuarios(id),
 
-    CONSTRAINT fk_pagamento_motorista
-        FOREIGN KEY (motorista_id)
-        REFERENCES usuarios(id),
-
-    CONSTRAINT chk_valor_pagamento
-        CHECK (valor > 0)
 );
 
 -- ==========================================
--- ÍNDICES
+-- INDEXES
 -- ==========================================
 
-CREATE INDEX idx_usuario_email
-ON usuarios(email);
+CREATE INDEX idx_users_email
+ON users(email);
 
-CREATE INDEX idx_carona_origem
-ON caronas(origem);
+CREATE INDEX idx_vehicles_user
+ON vehicles(user_id);
 
-CREATE INDEX idx_carona_destino
-ON caronas(destino);
+CREATE INDEX idx_rides_driver
+ON rides(driver_id);
 
-CREATE INDEX idx_carona_data
-ON caronas(data_hora_saida);
+CREATE INDEX idx_rides_origin
+ON rides(origin);
 
-CREATE INDEX idx_carona_status
-ON caronas(status);
+CREATE INDEX idx_rides_destination
+ON rides(destination);
 
-CREATE INDEX idx_solicitacao_status
-ON solicitacoes(status);
+CREATE INDEX idx_rides_departure
+ON rides(departure_time);
 
-CREATE INDEX idx_avaliacao_avaliado
-ON avaliacoes(avaliado_id);
+CREATE INDEX idx_rides_status
+ON rides(status);
 
-CREATE INDEX idx_notificacao_usuario
-ON notificacoes(usuario_id);
+CREATE INDEX idx_requests_passenger
+ON ride_requests(passenger_id);
 
-CREATE INDEX idx_pagamento_solicitacao
-ON pagamentos(solicitacao_id);
+CREATE INDEX idx_requests_ride
+ON ride_requests(ride_id);
 
-CREATE INDEX idx_pagamento_carona
-ON pagamentos(carona_id);
+CREATE INDEX idx_requests_status
+ON ride_requests(status);
 
-CREATE INDEX idx_pagamento_passageiro
-ON pagamentos(passageiro_id);
+CREATE INDEX idx_reviews_user
+ON reviews(reviewed_user_id);
 
-CREATE INDEX idx_pagamento_motorista
-ON pagamentos(motorista_id);
+CREATE INDEX idx_notifications_user
+ON notifications(user_id);
 
-CREATE INDEX idx_pagamento_status
-ON pagamentos(status);
+CREATE INDEX idx_payments_request
+ON payments(request_id);
 
+CREATE INDEX idx_payments_ride
+ON payments(ride_id);
 
-CREATE INDEX idx_carona_motorista
-ON caronas(motorista_id);
+CREATE INDEX idx_payments_passenger
+ON payments(passenger_id);
 
-CREATE INDEX idx_solicitacao_passageiro
-ON solicitacoes(passageiro_id);
+CREATE INDEX idx_payments_driver
+ON payments(driver_id);
 
-CREATE INDEX idx_solicitacao_carona
-ON solicitacoes(carona_id);
+CREATE INDEX idx_payments_status
+ON payments(status);

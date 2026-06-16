@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/register.css">
 </head>
+
 <body>
 
     <main class="register-page">
@@ -27,12 +29,8 @@
             <form id="registerForm" novalidate>
 
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nome completo</label>
-                    <input
-                        type="text"
-                        id="name"
-                        class="form-control"
-                        placeholder="Digite seu nome completo"
+                    <label for="fullName" class="form-label">Nome completo</label>
+                    <input type="text" id="fullName" class="form-control" placeholder="Digite seu nome completo"
                         required>
                     <div class="invalid-feedback">
                         Informe seu nome completo.
@@ -41,12 +39,7 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">E-mail</label>
-                    <input
-                        type="email"
-                        id="email"
-                        class="form-control"
-                        placeholder="Digite seu e-mail"
-                        required>
+                    <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" required>
                     <div class="invalid-feedback">
                         Informe um e-mail válido.
                     </div>
@@ -54,12 +47,7 @@
 
                 <div class="mb-3">
                     <label for="phone" class="form-label">Celular</label>
-                    <input
-                        type="tel"
-                        id="phone"
-                        class="form-control"
-                        placeholder="(00) 00000-0000"
-                        required>
+                    <input type="tel" id="phone" class="form-control" placeholder="(00) 00000-0000" required>
                     <div class="invalid-feedback">
                         Informe seu celular.
                     </div>
@@ -68,16 +56,8 @@
                 <div class="mb-3">
                     <label for="password" class="form-label">Senha</label>
                     <div class="input-group">
-                        <input
-                            type="password"
-                            id="password"
-                            class="form-control"
-                            placeholder="Crie sua senha"
-                            required>
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary"
-                            id="togglePassword">
+                        <input type="password" id="password" class="form-control" placeholder="Crie sua senha" required>
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
                             👁
                         </button>
                     </div>
@@ -89,16 +69,9 @@
                 <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Confirmar senha</label>
                     <div class="input-group">
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            class="form-control"
-                            placeholder="Confirme sua senha"
-                            required>
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary"
-                            id="toggleConfirmPassword">
+                        <input type="password" id="confirmPassword" class="form-control"
+                            placeholder="Confirme sua senha" required>
+                        <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">
                             👁
                         </button>
                     </div>
@@ -108,11 +81,7 @@
                 </div>
 
                 <div class="form-check mb-4">
-                    <input
-                        type="checkbox"
-                        class="form-check-input"
-                        id="terms"
-                        required>
+                    <input type="checkbox" class="form-check-input" id="terms" required>
                     <label class="form-check-label" for="terms">
                         Concordo com os termos de uso e a política de privacidade
                     </label>
@@ -142,4 +111,5 @@
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/register.js"></script>
 </body>
+
 </html>

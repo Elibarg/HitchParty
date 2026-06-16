@@ -14,7 +14,7 @@ async function initializeCreateRide() {
     }
 
     await loadComponents();
-
+    bindLogout();
     loadVehicles();
 
     bindForm();
@@ -50,7 +50,7 @@ async function loadComponents() {
             await navbarResponse.text();
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 
@@ -59,29 +59,6 @@ async function loadComponents() {
 }
 
 function loadVehicles() {
-
-    /*
-    BACKEND FUTURO
-
-    GET /api/vehicles
-
-    */
-
-    const vehicles = [
-
-        {
-            id: 1,
-            name:
-                "Honda Civic"
-        },
-
-        {
-            id: 2,
-            name:
-                "Toyota Corolla"
-        }
-
-    ];
 
     const select =
         document.getElementById(
@@ -171,15 +148,6 @@ async function handleCreateRide(event) {
 
         };
 
-        /*
-        BACKEND FUTURO
-
-        POST /api/rides
-
-        body: rideData
-
-        */
-
         console.log(
             "Nova carona:",
             rideData
@@ -205,7 +173,7 @@ async function handleCreateRide(event) {
         );
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 

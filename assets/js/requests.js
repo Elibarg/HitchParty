@@ -19,7 +19,7 @@ async function initializeRequests() {
     }
 
     await loadComponents();
-
+    bindLogout();
     loadRequests();
 
     bindEvents();
@@ -69,7 +69,7 @@ async function loadComponents() {
         }
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(
             "Erro ao carregar componentes:",
@@ -103,112 +103,6 @@ function bindEvents() {
 
 }
 
-/* =========================
-   DADOS
-========================= */
-
-function loadRequests() {
-
-    requests =
-        JSON.parse(
-            localStorage.getItem(
-                REQUESTS_STORAGE_KEY
-            )
-        ) || getMockRequests();
-
-}
-
-function getMockRequests() {
-
-    return [
-
-        {
-            id: 1,
-
-            type: "received",
-
-            passenger:
-                "Gabriel",
-
-            origin:
-                "Joinville",
-
-            destination:
-                "Blumenau",
-
-            date:
-                "Hoje • 18:30",
-
-            status:
-                "pending"
-        },
-
-        {
-            id: 2,
-
-            type: "received",
-
-            passenger:
-                "Maria",
-
-            origin:
-                "Joinville",
-
-            destination:
-                "Curitiba",
-
-            date:
-                "Amanhã • 07:00",
-
-            status:
-                "pending"
-        },
-
-        {
-            id: 3,
-
-            type: "sent",
-
-            driver:
-                "Carlos",
-
-            origin:
-                "Joinville",
-
-            destination:
-                "Florianópolis",
-
-            date:
-                "20/06 • 08:00",
-
-            status:
-                "approved"
-        },
-
-        {
-            id: 4,
-
-            type: "sent",
-
-            driver:
-                "Pedro",
-
-            origin:
-                "Joinville",
-
-            destination:
-                "Itajaí",
-
-            date:
-                "22/06 • 14:00",
-
-            status:
-                "pending"
-        }
-
-    ];
-
-}
 
 /* =========================
    ABAS
@@ -382,13 +276,13 @@ function createReceivedCard(request) {
                 <span class="
                     request-status
                     ${getStatusClass(
-                        request.status
-                    )}
+        request.status
+    )}
                 ">
 
                     ${getStatusLabel(
-                        request.status
-                    )}
+        request.status
+    )}
 
                 </span>
 
@@ -473,13 +367,13 @@ function createSentCard(request) {
                 <span class="
                     request-status
                     ${getStatusClass(
-                        request.status
-                    )}
+        request.status
+    )}
                 ">
 
                     ${getStatusLabel(
-                        request.status
-                    )}
+        request.status
+    )}
 
                 </span>
 
@@ -602,7 +496,7 @@ function getStatusLabel(
     status
 ) {
 
-    switch(status) {
+    switch (status) {
 
         case "approved":
             return "Aprovada";
@@ -621,7 +515,7 @@ function getStatusClass(
     status
 ) {
 
-    switch(status) {
+    switch (status) {
 
         case "approved":
             return "status-approved";

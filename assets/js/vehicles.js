@@ -13,6 +13,7 @@ async function initializeVehicles() {
     await loadComponents();
     loadVehicles();
     bindEvents();
+    bindLogout();
     bindFieldRestrictions();
 }
 
@@ -115,11 +116,10 @@ function createVehicleCard(vehicle) {
 
                 </div>
 
-                ${
-                    vehicle.primary
-                        ? `<span class="vehicle-badge">Principal</span>`
-                        : ""
-                }
+                ${vehicle.primary
+            ? `<span class="vehicle-badge">Principal</span>`
+            : ""
+        }
 
             </div>
 
@@ -135,11 +135,10 @@ function createVehicleCard(vehicle) {
 
             <div class="vehicle-actions">
 
-                ${
-                    !vehicle.primary
-                        ? `<button class="btn btn-outline-success" onclick="setPrimaryVehicle(${vehicle.id})">Principal</button>`
-                        : ""
-                }
+                ${!vehicle.primary
+            ? `<button class="btn btn-outline-success" onclick="setPrimaryVehicle(${vehicle.id})">Principal</button>`
+            : ""
+        }
 
                 <button class="btn btn-outline-primary" onclick="editVehicle(${vehicle.id})">Editar</button>
 
