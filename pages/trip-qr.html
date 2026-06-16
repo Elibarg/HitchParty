@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        QR da Viagem | HitchParty
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/trip-qr.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="trip-qr-page">
+
+        <section class="trip-card">
+
+            <div class="trip-header">
+
+                <h1>
+                    QR da Viagem
+                </h1>
+
+                <p>
+                    Apresente este QR Code ao motorista.
+                </p>
+
+            </div>
+
+            <div class="trip-route">
+
+                <div class="origin">
+
+                    Joinville
+
+                </div>
+
+                <div class="arrow">
+
+                    ↓
+
+                </div>
+
+                <div class="destination">
+
+                    Blumenau
+
+                </div>
+
+            </div>
+
+            <!-- QR -->
+
+            <div class="qr-container">
+
+                <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=HP-TRIP-2025-001"
+                    alt="QR Code da viagem"
+                    class="qr-image">
+
+            </div>
+
+            <div class="trip-code">
+
+                HP-TRIP-2025-001
+
+            </div>
+
+            <div class="trip-info">
+
+                <div class="info-item">
+
+                    <span>
+                        Motorista
+                    </span>
+
+                    <strong>
+                        Carlos Silva
+                    </strong>
+
+                </div>
+
+                <div class="info-item">
+
+                    <span>
+                        Data
+                    </span>
+
+                    <strong>
+                        12/06/2025
+                    </strong>
+
+                </div>
+
+                <div class="info-item">
+
+                    <span>
+                        Horário
+                    </span>
+
+                    <strong>
+                        18:30
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="trip-status">
+
+                ✓ Pronto para embarque
+
+            </div>
+
+            <div class="trip-actions">
+
+                <button
+                    class="btn btn-primary w-100"
+                    id="shareQrBtn">
+
+                    Compartilhar QR
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <!-- TOAST -->
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+
+        <div
+            id="feedbackToast"
+            class="toast text-bg-success border-0">
+
+            <div class="d-flex">
+
+                <div
+                    id="toastMessage"
+                    class="toast-body">
+
+                    QR compartilhado.
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+
+    <script src="../assets/js/trip-qr.js"></script>
+
+</body>
+
+</html>
