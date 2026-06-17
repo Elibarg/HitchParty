@@ -132,13 +132,13 @@ function getMockRequests() {
                 "Gabriel",
 
             origin:
-                "Joinville",
+                "Rua Guanabara",
 
             destination:
-                "Blumenau",
+                "Rua Aracaju",
 
             date:
-                "Hoje • 18:30",
+                "18:30",
 
             status:
                 "pending"
@@ -153,13 +153,13 @@ function getMockRequests() {
                 "Maria",
 
             origin:
-                "Joinville",
+                "Rua Farroupilha",
 
             destination:
-                "Curitiba",
+                "Rua Papanduva",
 
             date:
-                "Amanhã • 07:00",
+                "07:00",
 
             status:
                 "pending"
@@ -174,13 +174,13 @@ function getMockRequests() {
                 "Carlos",
 
             origin:
-                "Joinville",
+                "Rua Iguaçu",
 
             destination:
-                "Florianópolis",
+                "Rua Marcílio Dias",
 
             date:
-                "20/06 • 08:00",
+                "08:00",
 
             status:
                 "approved"
@@ -195,13 +195,13 @@ function getMockRequests() {
                 "Pedro",
 
             origin:
-                "Joinville",
+                "Rua Dona Francisca",
 
             destination:
-                "Itajaí",
+                "Rua 15 de Novembro",
 
             date:
-                "22/06 • 14:00",
+                "14:00",
 
             status:
                 "pending"

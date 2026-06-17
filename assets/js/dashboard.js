@@ -76,20 +76,20 @@ function loadDashboardData() {
         },
         upcomingRides: [
             {
-                route: "Centro → Bairro Sul",
-                date: "Hoje, 18:30",
+                route: "Rua 9 de Março → Rua Mário Lobo",
+                date: "07:10",
                 seat: "2 vagas",
                 price: "R$ 12,00"
             },
             {
-                route: "Joinville → Blumenau",
-                date: "Amanhã, 07:10",
+                route: "Rua João Colin → Rua São Paulo",
+                date: "12:20",
                 seat: "1 vaga",
                 price: "R$ 28,00"
             },
             {
-                route: "Universidade → Terminal",
-                date: "Sex, 12:20",
+                route: "Rua Albano Schmidt → Rua Coelho Neto",
+                date: "18:30",
                 seat: "3 vagas",
                 price: "R$ 8,00"
             }

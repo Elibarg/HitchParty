@@ -38,17 +38,31 @@ function isAuthenticated() {
     return !!getToken();
 
 }
+
+
 function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
+
+    const logoutButton =
+        document.getElementById(
+            "logoutButton"
+        );
 
     if (!logoutButton) return;
 
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
+    logoutButton.addEventListener(
+        "click",
+        (event) => {
 
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
+            event.preventDefault();
 
-        window.location.href = "login.html";
-    });
+            removeToken();
+
+            localStorage.removeItem(
+                APP_CONFIG.USER_KEY
+            );
+
+            window.location.href =
+                "login.html";
+        }
+    );
 }

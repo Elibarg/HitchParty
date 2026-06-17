@@ -1,0 +1,14 @@
+melhorar notificação do cadastro
+
+um bloqueio no criar corrida caso o usuario não tenha um veículo cadastrado
+
+verificar erro na pagina do dashboard
+dashboard.js:53 Uncaught (in promise) ReferenceError: userName is not defined
+    at loadUserInfo (dashboard.js:53:35)
+    at HTMLDocument.initializeDashboard (dashboard.js:11:5)
+loadUserInfo @ dashboard.js:53
+initializeDashboard @ dashboard.js:11
+
+
+localStorage.removeItem("hitchparty_requests");
+location.reload();
