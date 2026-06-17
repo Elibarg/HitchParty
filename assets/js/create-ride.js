@@ -58,42 +58,92 @@ async function loadComponents() {
 
 }
 
+/* ==========================================================
+   CARREGA OS VEÍCULOS DO USUÁRIO
+   ----------------------------------------------------------
+   Busca os veículos cadastrados no localStorage.
+   Caso nenhum veículo seja encontrado, bloqueia a criação
+   de novas corridas e direciona o usuário para cadastrar
+   um veículo.
+   ========================================================== */
+
 function loadVehicles() {
 
-    /*
-    BACKEND FUTURO
-
-    GET /api/vehicles
-
-    */
-
-    const vehicles = [
-
-        {
-            id: 1,
-            name:
-                "Honda Civic"
-        },
-
-        {
-            id: 2,
-            name:
-                "Toyota Corolla"
-        }
-
-    ];
+    const vehicles =
+        JSON.parse(
+            localStorage.getItem("hitchparty_vehicles")
+        ) || [];
 
     const select =
+        document.getElementById("vehicle");
+
+    // Remove opções antigas (mantendo apenas a primeira)
+    select.innerHTML = `
+        <option value="">
+            Selecione um veículo
+        </option>
+    `;
+
+    /* ==========================================================
+       VERIFICA SE O USUÁRIO POSSUI VEÍCULOS CADASTRADOS
+       ========================================================== */
+
+    if (vehicles.length === 0) {
+
         document.getElementById(
-            "vehicle"
-        );
+            "createRideForm"
+        ).style.display = "none";
+
+        Swal.fire({
+
+            icon: "warning",
+
+            title: "Nenhum veículo cadastrado",
+
+            html: `
+                Para criar uma carona é necessário possuir
+                <b>pelo menos um veículo cadastrado.</b>
+                <br><br>
+                Cadastre um veículo para continuar.
+            `,
+
+            showCancelButton: true,
+
+            confirmButtonText: "Cadastrar veículo",
+
+            cancelButtonText: "Voltar",
+
+            allowOutsideClick: false,
+
+            allowEscapeKey: false
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                window.location.href =
+                    "vehicles.html";
+
+            } else {
+
+                history.back();
+
+            }
+
+        });
+
+        return;
+    }
+
+    /* ==========================================================
+       PREENCHE O SELECT COM OS VEÍCULOS CADASTRADOS
+       ========================================================== */
 
     vehicles.forEach(vehicle => {
 
         select.innerHTML += `
-            <option
-                value="${vehicle.id}">
-                ${vehicle.name}
+            <option value="${vehicle.id}">
+                ${vehicle.brand} ${vehicle.model} (${vehicle.plate})
             </option>
         `;
 
