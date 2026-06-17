@@ -9,6 +9,7 @@ async function initializeRideDetail() {
     await loadComponents();
     bindLogout();
     bindActionButtons();
+    bindLogout();
     await loadRideDetails();
 }
 
@@ -46,79 +47,6 @@ function bindActionButtons() {
 async function loadRideDetails() {
     const rideId = new URLSearchParams(window.location.search).get("id");
 
-    try {
-        /*
-        BACKEND FUTURO
-
-        const response = await fetch(`${APP_CONFIG.API_URL}/rides/${rideId}`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao carregar detalhes da carona");
-        }
-
-        const ride = await response.json();
-        renderRide(ride);
-        return;
-        */
-
-        const ride = getMockRide(rideId);
-        renderRide(ride);
-    } catch (error) {
-        console.error(error);
-        showToast("Erro ao carregar os detalhes da carona.", "danger");
-    }
-}
-
-function getMockRide(rideId) {
-    const rides = {
-        "1": {
-            id: 1,
-            driverName: "Carlos Silva",
-            rating: 4.9,
-            trips: 84,
-            origin: "Joinville",
-            destination: "Blumenau",
-            date: "20/06/2026",
-            time: "07:10",
-            vehicle: "Honda Civic",
-            seats: 2,
-            price: "R$ 25,00",
-            notes: "Bagagem pequena permitida."
-        },
-        "2": {
-            id: 2,
-            driverName: "Ana Souza",
-            rating: 4.8,
-            trips: 61,
-            origin: "Joinville",
-            destination: "Curitiba",
-            date: "21/06/2026",
-            time: "08:00",
-            vehicle: "Toyota Corolla",
-            seats: 3,
-            price: "R$ 40,00",
-            notes: "Não é permitido fumar."
-        }
-    };
-
-    return rides[rideId] || {
-        id: rideId || 0,
-        driverName: "Motorista",
-        rating: 0.0,
-        trips: 0,
-        origin: "Origem",
-        destination: "Destino",
-        date: "--/--/----",
-        time: "--:--",
-        vehicle: "Veículo não informado",
-        seats: 0,
-        price: "R$ 0,00",
-        notes: "Nenhuma observação cadastrada."
-    };
 }
 
 function renderRide(ride) {

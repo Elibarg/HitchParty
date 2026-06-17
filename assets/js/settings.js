@@ -65,7 +65,7 @@ async function loadComponents() {
         }
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(
             "Erro ao carregar componentes:",
@@ -307,7 +307,7 @@ async function logoutAllSessions() {
         );
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 
@@ -367,7 +367,7 @@ async function deleteAccount() {
         }, 1500);
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 

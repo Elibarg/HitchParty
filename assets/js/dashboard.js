@@ -7,6 +7,7 @@ async function initializeDashboard() {
     }
 
     await loadComponents();
+    bindLogout();
     loadUserInfo();
     bindLogout(); 
     loadDashboardData();
@@ -35,9 +36,8 @@ async function loadComponents() {
 }
 
 function loadUserInfo() {
-    const userNameElement = document.getElementById("userName");
+    const userNameElement = document.getElementById("fullName");
 
-    let userName = "Usuário";
 
     try {
         const storedUser = localStorage.getItem(APP_CONFIG.USER_KEY);

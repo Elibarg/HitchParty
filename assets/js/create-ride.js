@@ -14,7 +14,7 @@ async function initializeCreateRide() {
     }
 
     await loadComponents();
-
+    bindLogout();
     loadVehicles();
     bindLogout();
     bindForm();
@@ -50,7 +50,7 @@ async function loadComponents() {
             await navbarResponse.text();
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 
@@ -221,15 +221,6 @@ async function handleCreateRide(event) {
 
         };
 
-        /*
-        BACKEND FUTURO
-
-        POST /api/rides
-
-        body: rideData
-
-        */
-
         console.log(
             "Nova carona:",
             rideData
@@ -255,7 +246,7 @@ async function handleCreateRide(event) {
         );
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(error);
 

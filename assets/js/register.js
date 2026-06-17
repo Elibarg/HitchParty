@@ -30,7 +30,7 @@ async function handleRegister(event) {
 
     const form = event.target;
 
-    const name = document.getElementById("name").value.trim();
+    const fullName = document.getElementById("fullName").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
@@ -62,13 +62,13 @@ async function handleRegister(event) {
     }
 
     const payload = {
-        name,
+        fullName,
         email,
         phone,
         password
     };
 
-  try {
+    try {
         // CÓDIGO REAL DA API
         const response = await fetch(`${APP_CONFIG.API_URL}/auth/register`, {
             method: "POST",
