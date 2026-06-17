@@ -29,8 +29,8 @@ function setupPasswordToggle() {
 
             passwordInput.type =
                 passwordInput.type === "password"
-                ? "text"
-                : "password";
+                    ? "text"
+                    : "password";
 
         }
     );
@@ -89,12 +89,22 @@ async function handleLogin(event) {
         // Se a senha estiver correta, recebe os dados
         const data = await response.json();
 
+        console.log('Resposta do login:', data);
         // Salva o token real no navegador e entra no Dashboard
         saveToken(data.token);
-        
+
+        // salva os dados do usuário
+        localStorage.setItem(
+            APP_CONFIG.USER_KEY,
+            JSON.stringify(data.user)
+        );
+
         console.log("Opção Lembrar-me:", rememberMe);
 
         window.location.href = "dashboard.html";
+
+
+
 
     } catch (error) {
         console.error("Erro no login:", error);

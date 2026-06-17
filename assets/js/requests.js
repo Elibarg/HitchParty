@@ -19,7 +19,7 @@ async function initializeRequests() {
     }
 
     await loadComponents();
-
+    bindLogout();
     loadRequests();
     bindLogout();
     bindEvents();
@@ -69,7 +69,7 @@ async function loadComponents() {
         }
 
     }
-    catch(error) {
+    catch (error) {
 
         console.error(
             "Erro ao carregar componentes:",
@@ -103,6 +103,8 @@ function bindEvents() {
 
 }
 
+<<<<<<< HEAD
+=======
 /* =========================
    DADOS
 ========================= */
@@ -210,6 +212,7 @@ function getMockRequests() {
     ];
 
 }
+>>>>>>> 43cc83fd25fa378975744bb4fb0585c59c37084a
 
 /* =========================
    ABAS
@@ -383,13 +386,13 @@ function createReceivedCard(request) {
                 <span class="
                     request-status
                     ${getStatusClass(
-                        request.status
-                    )}
+        request.status
+    )}
                 ">
 
                     ${getStatusLabel(
-                        request.status
-                    )}
+        request.status
+    )}
 
                 </span>
 
@@ -474,13 +477,13 @@ function createSentCard(request) {
                 <span class="
                     request-status
                     ${getStatusClass(
-                        request.status
-                    )}
+        request.status
+    )}
                 ">
 
                     ${getStatusLabel(
-                        request.status
-                    )}
+        request.status
+    )}
 
                 </span>
 
@@ -603,7 +606,7 @@ function getStatusLabel(
     status
 ) {
 
-    switch(status) {
+    switch (status) {
 
         case "approved":
             return "Aprovada";
@@ -622,7 +625,7 @@ function getStatusClass(
     status
 ) {
 
-    switch(status) {
+    switch (status) {
 
         case "approved":
             return "status-approved";
