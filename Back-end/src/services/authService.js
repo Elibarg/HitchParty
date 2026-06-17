@@ -1,70 +1,37 @@
-const usuarioRepository =
-    require('../repositories/usuarioRepository');
+const userRepository = require('../repositories/userRepository');
+const { hashPassword, verifyPassword } = require('../utils/passwordUtils');
+const { mapUser } = require('../utils/userMapper');
 
-async function registrarUsuario(
-    fullName,
-    email,
-    phone,
-    password
-) {
+async function registerUser({ fullName, email, phone, password }) {
+    const existingUser = await userRepository.findByEmail(email);
 
-    // Verifica se o usuário já existe
-    const usuarioExistente =
-        await usuarioRepository
-            .buscarPorEmail(email);
-
-    if (usuarioExistente) {
-
-        throw new Error(
-            'E-mail já cadastrado.'
-        );
-
+    if (existingUser) {
+        throw new Error('E-mail já cadastrado.');
     }
 
-    const resultado =
-        await usuarioRepository
-            .criarUsuario(
-                fullName,
-                email,
-                phone,
-                password
-            );
+    const createdUser = await userRepository.create({
+        fullName,
+        email,
+        phone,
+        passwordHash: hashPassword(password)
+    });
 
-    return resultado;
-
+    return mapUser(createdUser);
 }
 
-async function loginUsuario(
-    email,
-    password
-) {
+async function loginUser({ email, password }) {
+    const user = await userRepository.findByEmail(email);
 
-    const user =
-        await usuarioRepository
-            .buscarPorEmail(email);
-
-    if (!user) {
-
-        throw new Error(
-            'Usuário não encontrado.'
-        );
-
+    if (!user || !verifyPassword(password, user.password_hash)) {
+        throw new Error('Credenciais inválidas.');
     }
 
-    if (
-        user.password_hash !== password
-    ) {
+    await userRepository.updateLastLogin(user.id);
 
-        throw new Error(
-            'Senha inválida.'
-        );
-
-    }
-
-    return user;
-
+    return mapUser(user);
 }
 
 module.exports = {
-    registrarUsuario, loginUsuario
+    registerUser,
+    loginUser
 };

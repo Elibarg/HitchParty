@@ -1,115 +1,55 @@
-const authService =
-    require('../services/authService');
-
 const jwt = require('jsonwebtoken');
+const authService = require('../services/authService');
+const { JWT_SECRET } = require('../middlewares/authMiddleware');
 
-
-
-async function registrar(req, res) {
-
-    console.log(req.body);
-
-    try {
-
-        const {
-            fullName,
-            email,
-            phone,
-            password
-
-        } = req.body;
-
-        const resultado =
-            await authService
-                .registrarUsuario(
-                    fullName,
-                    email,
-                    phone,
-                    password
-                );
-
-        return res.status(201).json({
-
-            mensagem:
-                'Usuário criado com sucesso.',
-
-            usuario_id:
-                resultado.insertId
-
-        });
-
-    }
-    catch (erro) {
-
-        console.error(erro);
-
-        return res.status(400).json({
-
-            erro:
-                erro.message
-
-        });
-
-    }
-
+function createToken(user) {
+    return jwt.sign(
+        {
+            id: user.id,
+            email: user.email
+        },
+        JWT_SECRET,
+        {
+            expiresIn: '24h'
+        }
+    );
 }
 
-async function entrar(req, res) {
-
-    console.log(req.body);
-
+async function register(req, res) {
     try {
+        const user = await authService.registerUser(req.body);
+        const token = createToken(user);
 
-        const {
-            email,
-            password
-        } = req.body;
+        return res.status(201).json({
+            message: 'Usuário criado com sucesso.',
+            user,
+            token
+        });
+    } catch (error) {
+        return res.status(400).json({
+            error: error.message
+        });
+    }
+}
 
-        const usuario =
-            await authService
-                .loginUsuario(
-                    email,
-                    password
-                );
-
-        const token = jwt.sign(
-            {
-                id: usuario.id,
-                email: usuario.email
-            },
-            'hitchparty_secret',
-            {
-                expiresIn: '24h'
-            }
-        );
+async function login(req, res) {
+    try {
+        const user = await authService.loginUser(req.body);
+        const token = createToken(user);
 
         return res.status(200).json({
-
-            mensagem:
-                'Login realizado com sucesso.',
-
-            usuario,
-
+            message: 'Login realizado com sucesso.',
+            user,
             token
-
         });
-
-    }
-    catch (erro) {
-
-        console.error(erro);
-
-        return res.status(400).json({
-
-            erro:
-                erro.message
-
+    } catch (error) {
+        return res.status(401).json({
+            error: error.message
         });
-
     }
-
 }
 
 module.exports = {
-    registrar, entrar
+    register,
+    login
 };
