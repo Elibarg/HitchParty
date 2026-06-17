@@ -85,10 +85,35 @@ async function handleRegister(event) {
 
         const data = await response.json();
 
-        // O alerta verdadeiro que só aparece se a API responder com sucesso
-        alert("Conta criada com sucesso no Banco de Dados!");
+        /* ==========================================================
+        NOTIFICAÇÃO DE SUCESSO DO CADASTRO
+        ----------------------------------------------------------
+        Esta notificação é exibida somente quando a API confirma
+        que o usuário foi cadastrado com sucesso.
 
-        window.location.href = "login.html";
+        Após 3 segundos, o usuário é redirecionado automaticamente
+        para a tela de login.
+        ========================================================== */
+         Swal.fire({
+             icon: "success",
+             title: "Cadastro realizado!",
+             html: `
+                    <b>Bem-vindo ao HitchParty!</b><br><br>
+                    Sua conta foi criada com sucesso.<br>
+                    Você será redirecionado para a tela de login.
+                `,
+             timer: 2500,
+             timerProgressBar: true,
+             showConfirmButton: false,
+             allowOutsideClick: false,
+             allowEscapeKey: false
+            });
+
+        // Aguarda o tempo da notificação antes de redirecionar
+         setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2500);
+
 
     } catch (error) {
         console.error("Erro na requisição:", error);
