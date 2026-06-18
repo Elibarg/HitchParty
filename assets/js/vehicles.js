@@ -31,6 +31,8 @@ let vehicles = [];
 
 let selectedVehicleImage = null;
 
+let vehiclePendingDeletion = null;
+
 /*
 selectedVehicleImage
 
@@ -65,9 +67,9 @@ async function initializeVehicles() {
 
     loadVehicles();
 
-    bindEvents();
-
     renderVehicles();
+
+    bindEvents();
 
 }
 
@@ -127,6 +129,11 @@ async function loadComponents() {
 
 function bindEvents() {
 
+    const confirmDeleteButton =
+        document.getElementById(
+            "confirmDeleteVehicleBtn"
+        );
+
     const saveButton =
         document.getElementById(
             "saveVehicleBtn"
@@ -141,6 +148,20 @@ function bindEvents() {
         document.getElementById(
             "vehicleModal"
         );
+
+    const removeImageButton =
+        document.getElementById(
+            "removeVehicleImageBtn"
+        );
+
+    if (confirmDeleteButton) {
+
+        confirmDeleteButton.addEventListener(
+            "click",
+            confirmDeleteVehicle
+        );
+
+    }
 
     if (saveButton) {
 
@@ -160,6 +181,15 @@ function bindEvents() {
 
     }
 
+    if (removeImageButton) {
+
+        removeImageButton.addEventListener(
+            "click",
+            removeVehicleImage
+        );
+
+    }
+
     if (modal) {
 
         modal.addEventListener(
@@ -168,20 +198,10 @@ function bindEvents() {
         );
 
     }
-    const removeImageButton =
-    document.getElementById(
-        "removeVehicleImageBtn"
-        );
 
-        if (removeImageButton) {
-
-        removeImageButton.addEventListener(
-            "click",
-            removeVehicleImage
-        );
-
-}
     bindFieldRestrictions();
+
+    initializeImageDropArea();
 
 }
 
@@ -357,10 +377,17 @@ function validateImage(file) {
         )
     ) {
 
-        showToast(
-            "Formato inválido. Utilize PNG, JPG ou WEBP.",
-            "danger"
-        );
+        showToast({
+
+            icon: "⚠️",
+
+            title: "Formato inválido",
+
+            message: "Utilize apenas imagens PNG, JPG ou WEBP.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -371,10 +398,17 @@ function validateImage(file) {
         MAX_IMAGE_SIZE
     ) {
 
-        showToast(
-            "A imagem deve possuir no máximo 5 MB.",
-            "danger"
-        );
+        showToast({
+
+            icon: "📷",
+
+            title: "Imagem muito grande",
+
+            message: "O tamanho máximo permitido é 5 MB.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -406,10 +440,17 @@ function readImage(file) {
 
     reader.onerror = function() {
 
-        showToast(
-            "Erro ao carregar imagem.",
-            "danger"
-        );
+        showToast({
+
+            icon: "❌",
+
+            title: "Erro na imagem",
+
+            message: "Não foi possível carregar a imagem selecionada.",
+
+            variant: "danger"
+
+        });
 
     };
 
@@ -469,18 +510,23 @@ function removeVehicleImage() {
 
     }
 
-    showToast(
-        "Imagem removida.",
-        "warning"
-    );
+    showToast({
+
+            icon: "🖼️",
+
+            title: "Imagem removida",
+
+            message: "A foto do veículo foi removida.",
+
+            variant: "warning"
+
+        });
 
 }
 
 /* ============================================================
    DRAG AND DROP
 ============================================================ */
-
-initializeImageDropArea();
 
 function initializeImageDropArea() {
 
@@ -623,16 +669,16 @@ function saveVehicle() {
 
     const vehicle = {
 
-        id:
+         id:
             id
-            ? Number(id)
-            : Date.now(),
+            ? id
+            : generateVehicleId(),
 
         brand:
             document
-                .getElementById("brand")
-                .value
-                .trim(),
+            .getElementById("brand")
+            .value
+            .trim(),
 
         model:
             document
@@ -707,9 +753,17 @@ function createVehicle(vehicle) {
 
     closeVehicleModal();
 
-    showToast(
-        "Veículo cadastrado."
-    );
+    showToast({
+
+    icon: "🚗",
+
+    title: "Veículo cadastrado",
+
+    message: `${vehicle.brand} ${vehicle.model} foi adicionado.`,
+
+    variant: "success"
+
+});
 
 }
 
@@ -752,9 +806,17 @@ function updateVehicle(vehicle) {
 
     closeVehicleModal();
 
-    showToast(
-        "Veículo atualizado."
-    );
+    showToast({
+
+            icon: "✏️",
+
+            title: "Veículo atualizado",
+
+            message: `${vehicle.brand} ${vehicle.model} foi atualizado.`,
+
+            variant: "primary"
+
+        });
 
 }
 
@@ -836,38 +898,69 @@ function editVehicle(id) {
 
 function deleteVehicle(id) {
 
-    const confirmed =
-        confirm(
-            "Deseja remover este veículo?"
-        );
+    vehiclePendingDeletion =
 
-    if (!confirmed) {
+        getVehicleById(id);
+
+    if (!vehiclePendingDeletion) {
+
+        return;
+
+    }
+
+    document.getElementById(
+        "deleteVehicleName"
+    ).textContent =
+
+        `${vehiclePendingDeletion.brand}
+        ${vehiclePendingDeletion.model}`;
+
+    document.getElementById(
+        "deleteVehiclePlate"
+    ).textContent =
+
+        vehiclePendingDeletion.plate;
+
+    new bootstrap.Modal(
+
+        document.getElementById(
+            "deleteVehicleModal"
+        )
+
+    ).show();
+
+}
+function confirmDeleteVehicle() {
+
+    if (!vehiclePendingDeletion) {
 
         return;
 
     }
 
     const removedVehicle =
-        vehicles.find(
 
-            vehicle =>
-                vehicle.id === id
-
-        );
+        vehiclePendingDeletion;
 
     vehicles =
+
         vehicles.filter(
 
             vehicle =>
-                vehicle.id !== id
+
+                vehicle.id !==
+
+                removedVehicle.id
 
         );
 
     if (
 
-        removedVehicle?.primary
+        removedVehicle.primary
+
         &&
-        vehicles.length > 0
+
+        vehicles.length
 
     ) {
 
@@ -879,36 +972,69 @@ function deleteVehicle(id) {
 
     renderVehicles();
 
-    showToast(
-        "Veículo removido."
-    );
+    bootstrap.Modal.getInstance(
+
+        document.getElementById(
+
+            "deleteVehicleModal"
+
+        )
+
+    ).hide();
+
+    showToast({
+
+        icon:"🗑️",
+
+        title:"Veículo removido",
+
+        message:
+        `${removedVehicle.brand}
+        ${removedVehicle.model}
+        foi removido.`,
+
+        variant:"danger"
+
+    });
+
+    vehiclePendingDeletion = null;
 
 }
-
 /* ============================================================
    PRINCIPAL
 ============================================================ */
 
 function setPrimaryVehicle(id) {
 
-    vehicles.forEach(
+    vehicles.forEach(vehicle => {
 
-        vehicle => {
+        vehicle.primary = vehicle.id === id;
 
-            vehicle.primary =
-                vehicle.id === id;
-
-        }
-
-    );
+    });
 
     persistVehicles();
 
     renderVehicles();
 
-    showToast(
-        "Veículo principal atualizado."
-    );
+    const vehicle = getVehicleById(id);
+
+    if (!vehicle) {
+
+        return;
+
+    }
+
+    showToast({
+
+        icon: "⭐",
+
+        title: "Veículo principal",
+
+        message: `${vehicle.brand} ${vehicle.model} agora é seu veículo principal.`,
+
+        variant: "success"
+
+    });
 
 }
 
@@ -1337,18 +1463,23 @@ function validateVehicleForm() {
         );
 
     const editingId =
-        Number(
-            document
-                .getElementById("vehicleId")
-                .value
-        );
+        document
+            .getElementById("vehicleId")
+            .value;
 
     if (!brand) {
 
-        showToast(
-            "Informe a marca.",
-            "warning"
-        );
+        showToast({
+
+            icon: "⚠️",
+
+            title: "Marca obrigatória",
+
+            message: "Informe a marca do veículo.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1356,10 +1487,17 @@ function validateVehicleForm() {
 
     if (!model) {
 
-        showToast(
-            "Informe o modelo.",
-            "warning"
-        );
+        showToast({
+
+            icon: "⚠️",
+
+            title: "Modelo obrigatório",
+
+            message: "Informe o modelo do veículo.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1367,10 +1505,17 @@ function validateVehicleForm() {
 
     if (!color) {
 
-        showToast(
-            "Informe a cor.",
-            "warning"
-        );
+        showToast({
+
+            icon: "🎨",
+
+            title: "Cor obrigatória",
+
+            message: "Informe a cor do veículo.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1378,10 +1523,17 @@ function validateVehicleForm() {
 
     if (!isValidYear(year)) {
 
-        showToast(
-            "Ano inválido.",
-            "warning"
-        );
+       showToast({
+
+            icon: "📅",
+
+            title: "Ano inválido",
+
+            message: "Informe um ano entre 1980 e o próximo ano.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1389,10 +1541,17 @@ function validateVehicleForm() {
 
     if (!isValidSeats(seats)) {
 
-        showToast(
-            "Quantidade de assentos inválida.",
-            "warning"
-        );
+        showToast({
+
+            icon: "💺",
+
+            title: "Assentos inválidos",
+
+            message: "Informe uma quantidade entre 1 e 8 assentos.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1400,10 +1559,17 @@ function validateVehicleForm() {
 
     if (!isValidPlate(plate)) {
 
-        showToast(
-            "Placa inválida.",
-            "warning"
-        );
+        showToast({
+
+            icon: "⚠️",
+
+            title: "Placa inválida",
+
+            message: "Utilize ABC1234 ou ABC1D23.",
+
+            variant: "warning"
+
+        });
 
         return false;
 
@@ -1414,10 +1580,17 @@ function validateVehicleForm() {
         editingId
     )) {
 
-        showToast(
-            "Já existe um veículo com essa placa.",
-            "danger"
-        );
+        showToast({
+
+            icon: "🚫",
+
+            title: "Placa já cadastrada",
+
+            message: "Já existe outro veículo utilizando essa placa.",
+
+            variant: "danger"
+
+        });
 
         return false;
 
@@ -1516,17 +1689,55 @@ function isValidSeats(seats) {
    TOAST
 ============================================================ */
 
-function showToast(
-    message,
-    variant = "success"
-) {
+function showToast({
+
+    icon = "✅",
+
+    title = "Sucesso",
+
+    message = "",
+
+    variant = "success",
+
+    delay = 3000
+
+}) {
 
     const toast =
         document.getElementById(
             "feedbackToast"
         );
 
-    if (!toast) {
+    const toastIcon =
+        document.getElementById(
+            "toastIcon"
+        );
+
+    const toastTitle =
+        document.getElementById(
+            "toastTitle"
+        );
+
+    const toastMessage =
+        document.getElementById(
+            "toastMessage"
+        );
+
+    if (
+
+        !toast ||
+
+        !toastIcon ||
+
+        !toastTitle ||
+
+        !toastMessage
+
+    ) {
+
+        console.warn(
+            "Toast não encontrado."
+        );
 
         alert(message);
 
@@ -1534,12 +1745,13 @@ function showToast(
 
     }
 
-    const body =
-        document.getElementById(
-            "toastMessage"
-        );
+    toastIcon.textContent =
+        icon;
 
-    body.textContent =
+    toastTitle.textContent =
+        title;
+
+    toastMessage.textContent =
         message;
 
     toast.className =
@@ -1553,7 +1765,7 @@ function showToast(
         .getOrCreateInstance(
             toast,
             {
-                delay: 3000
+                delay
             }
         )
         .show();
@@ -1566,8 +1778,14 @@ function showToast(
 
 function generateVehicleId() {
 
-    return Date.now();
+    if (
+        window.crypto &&
+        typeof crypto.randomUUID === "function"
+    ) {
+        return crypto.randomUUID();
 
+    }
+    return Date.now().toString();
 }
 
 function getVehicleById(id) {
@@ -1809,23 +2027,33 @@ function importVehicles(json) {
 
         renderVehicles();
 
-        showToast(
+       showToast({
 
-            "Backup importado."
+            icon: "📂",
 
-        );
+            title: "Backup importado",
+
+            message: "Os veículos foram restaurados com sucesso.",
+
+            variant: "success"
+
+        });
 
     }
 
     catch {
 
-        showToast(
+        showToast({
 
-            "Arquivo inválido.",
+            icon: "❌",
 
-            "danger"
+            title: "Arquivo inválido",
 
-        );
+            message: "Não foi possível importar o backup selecionado.",
+
+            variant: "danger"
+
+        });
 
     }
 

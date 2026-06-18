@@ -274,31 +274,115 @@
         </div>
 
     </div>
+    <!-- Modal de confirmação -->
+    <div
+        class="modal fade"
+        id="deleteVehicleModal"
+        tabindex="-1"
+        aria-hidden="true">
 
-    <!-- Toast -->
-    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+        <div class="modal-dialog modal-dialog-centered">
 
-        <div
-            id="feedbackToast"
-            class="toast text-bg-success border-0">
+            <div class="modal-content">
 
-            <div class="d-flex">
+                <div class="modal-header">
 
-                <div id="toastMessage" class="toast-body">
-                    Veículo salvo.
+                    <h5 class="modal-title">
+
+                        Excluir veículo
+
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
                 </div>
 
-                <button
-                    type="button"
-                    class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"
-                    aria-label="Fechar">
-                </button>
+                <div class="modal-body">
+
+                    <p>
+
+                        Tem certeza que deseja remover este veículo?
+
+                    </p>
+
+                    <div class="alert alert-light border">
+
+                        <strong id="deleteVehicleName">
+
+                        </strong>
+
+                        <br>
+
+                        <small id="deleteVehiclePlate">
+
+                        </small>
+
+                    </div>
+
+                    <p class="text-danger mb-0">
+
+                        Esta ação não poderá ser desfeita.
+
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        id="confirmDeleteVehicleBtn"
+                        class="btn btn-danger">
+
+                        Excluir
+
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
+    </div>
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+            <div
+                id="feedbackToast"
+                class="toast border-0 shadow-lg">
+                <div class="toast-body">
+                    <div class="toast-content">
+                        <div
+                            id="toastIcon"
+                            class="toast-icon">
+                            ✅
+                        </div>
+                        <div>
+                            <h6
+                                id="toastTitle"
+                                class="toast-title">
+                                Sucesso
+                            </h6>
+                            <p
+                                id="toastMessage"Toast
+                                class="toast-message">
+                                Operação realizada.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
