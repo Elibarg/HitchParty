@@ -1252,7 +1252,7 @@ function createVehicleCard(vehicle) {
                         : `
                         <button
                             class="btn btn-outline-success"
-                            onclick="setPrimaryVehicle(${vehicle.id})">
+                            onclick="setPrimaryVehicle('${vehicle.id}')">
 
                             Principal
 
@@ -1262,7 +1262,7 @@ function createVehicleCard(vehicle) {
 
                     <button
                         class="btn btn-outline-primary"
-                        onclick="editVehicle(${vehicle.id})">
+                        onclick="editVehicle('${vehicle.id}')">
 
                         Editar
 
@@ -1270,7 +1270,7 @@ function createVehicleCard(vehicle) {
 
                     <button
                         class="btn btn-outline-danger"
-                        onclick="deleteVehicle(${vehicle.id})">
+                        onclick="deleteVehicle('${vehicle.id}')">
 
                         Excluir
 
