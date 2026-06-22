@@ -1,5 +1,5 @@
 colocar uma verificação de veiculo no vehicles
-melhorar a notificação no vehicles e 
+melhorar as notificação no vehicles 
 
 
 vehicles.js:1960 HitchParty Vehicles
@@ -8,4 +8,4 @@ vehicles.html:1 Blocked aria-hidden on an element because its descendant retaine
 Element with focus: <button.btn btn-primary#saveVehicleBtn>
 Ancestor with aria-hidden: <div.modal fade#vehicleModal> <div class=​"modal fade" id=​"vehicleModal" tabindex=​"-1" style=​"display:​ none;​" aria-hidden=​"true">​…​</div>​
 
-npm run dev
+npm run dev 
