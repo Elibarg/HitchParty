@@ -140,3 +140,49 @@ function showToast(message, variant = "success") {
 
     toast.show();
 }
+
+// =====================================================================
+// MAPA DA TELA DE DETALHES (Apenas Visualização)
+// =====================================================================
+
+window.initDetalheMapa = function() {
+    const divMapa = document.getElementById("meu-mapa");
+    
+    if (divMapa) {
+        // Inicia o mapa limpo, sem os controles feios
+        const mapa = new google.maps.Map(divMapa, {
+            zoom: 13,
+            center: { lat: -26.3044, lng: -48.8456 }, 
+            disableDefaultUI: true,
+            zoomControl: true
+        });
+
+        // Prepara os serviços para desenhar a linha azul
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer({ map: mapa });
+
+        // Deixamos essa função global para você conseguir chamá-la quando a API do Node devolver os dados
+        window.desenharRotaDoBanco = function(enderecoOrigem, enderecoDestino) {
+            
+            // Preenche os textos no HTML para o usuário ler
+            document.getElementById("origemTexto").innerText = enderecoOrigem;
+            document.getElementById("destinoTexto").innerText = enderecoDestino;
+
+            const pedidoDeRota = {
+                origin: enderecoOrigem,
+                destination: enderecoDestino,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(pedidoDeRota, (resultado, status) => {
+                if (status === "OK") {
+                    directionsRenderer.setDirections(resultado);
+                } else {
+                    console.error("Não foi possível traçar a rota da viagem salva:", status);
+                }
+            });
+        };
+    }
+};
+// Teste forçado: desenha a rota 1 segundo após a página carregar
+setTimeout(() => window.desenharRotaDoBanco("UniSenai Joinville", "Shopping Mueller Joinville"), 1000);
