@@ -38,6 +38,11 @@
                     Rota
                 </h2>
 
+                <section id="mapa-section" class="mb-3 d-none">
+    <label class="form-label">Visualização do Trajeto</label>
+    <div id="meu-mapa" style="height: 250px; width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>
+</section>
+
                 <div class="mb-3">
 
                     <label
@@ -46,7 +51,6 @@
 
                         Origem
                     </label>
-
                     <input
                         type="text"
                         id="origin"
@@ -232,6 +236,7 @@
     <script src="../assets/js/app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/js/create-ride.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhZ5OJhKYPg4HMlTl6ItQ0-c0rJZVrwx8&libraries=places&callback=initMap" async defer></script>
 
 </body>
 

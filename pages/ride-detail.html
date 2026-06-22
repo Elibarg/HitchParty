@@ -2,184 +2,98 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Detalhes da Carona | HitchParty</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="../assets/css/variables.css">
     <link rel="stylesheet" href="../assets/css/global.css">
     <link rel="stylesheet" href="../assets/css/ride-detail.css">
-
 </head>
 
 <body>
-
     <div id="header-slot"></div>
-
     <main class="ride-detail-page">
 
         <section class="driver-card">
-
-            <div class="driver-avatar">
-                GS
-            </div>
-
+            <div class="driver-avatar">GS</div>
             <div class="driver-info">
-
-                <h2 id="driverName">
-                    Motorista
-                </h2>
-
-                <p id="driverRating">
-                    ⭐ 0.0 • 0 viagens
-                </p>
-
+                <h2 id="driverName">Motorista</h2>
+                <p id="driverRating">⭐ 0.0 • 0 viagens</p>
             </div>
-
         </section>
 
         <section class="route-card">
-
             <h3>Rota</h3>
+            
+            <div id="meu-mapa" style="height: 250px; width: 100%; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>
 
             <div class="route-timeline">
-
-                <div class="route-point start">
+                <div class="route-point start" id="origemTexto">
                     Origem
                 </div>
-
                 <div class="route-line"></div>
-
-                <div class="route-point end">
+                <div class="route-point end" id="destinoTexto">
                     Destino
                 </div>
-
             </div>
-
         </section>
 
         <section class="details-card">
-
             <h3>Detalhes da Viagem</h3>
-
             <div class="detail-item">
                 <span>📅 Data</span>
                 <strong id="rideDate"></strong>
             </div>
-
             <div class="detail-item">
                 <span>🕒 Horário</span>
                 <strong id="rideTime"></strong>
             </div>
-
             <div class="detail-item">
                 <span>🚗 Veículo</span>
                 <strong id="vehicle"></strong>
             </div>
-
             <div class="detail-item">
                 <span>💺 Vagas</span>
                 <strong id="availableSeats"></strong>
             </div>
-
             <div class="detail-item">
                 <span>💰 Valor</span>
                 <strong id="price"></strong>
             </div>
-
         </section>
 
         <section class="notes-card">
-
             <h3>Observações</h3>
-
-            <p id="rideNotes">
-                Nenhuma observação cadastrada.
-            </p>
-
+            <p id="rideNotes">Nenhuma observação cadastrada.</p>
         </section>
 
         <section class="action-buttons">
-
-            <button
-                id="requestSeatBtn"
-                class="btn btn-primary w-100 request-btn">
-
-                Solicitar Vaga
-
-            </button>
-
-            <a
-                id="openChatBtn"
-                href="chat.html"
-                class="btn btn-outline-primary w-100 message-btn">
-
-                Abrir Chat
-
-            </a>
-
-            <a
-                id="openQrBtn"
-                href="trip-qr.html"
-                class="btn btn-outline-success w-100 message-btn">
-
-                Mostrar QR
-
-            </a>
-
-            <a
-                id="scanQrBtn"
-                href="scan-qr.html"
-                class="btn btn-outline-secondary w-100 message-btn">
-
-                Escanear QR
-
-            </a>
-
+            <button id="requestSeatBtn" class="btn btn-primary w-100 request-btn">Solicitar Vaga</button>
+            <a id="openChatBtn" href="chat.html" class="btn btn-outline-primary w-100 message-btn">Abrir Chat</a>
+            <a id="openQrBtn" href="trip-qr.html" class="btn btn-outline-success w-100 message-btn">Mostrar QR</a>
+            <a id="scanQrBtn" href="scan-qr.html" class="btn btn-outline-secondary w-100 message-btn">Escanear QR</a>
         </section>
 
     </main>
 
     <div id="navbar-slot"></div>
 
-    <!-- Toast de feedback -->
     <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
-
-        <div
-            id="feedbackToast"
-            class="toast align-items-center text-bg-success border-0"
-            role="alert"
-            aria-live="assertive"
-            aria-atomic="true">
-
+        <div id="feedbackToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-
-                <div class="toast-body" id="toastMessage">
-                    Ação concluída com sucesso.
-                </div>
-
-                <button
-                    type="button"
-                    class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"
-                    aria-label="Fechar">
-                </button>
-
+                <div class="toast-body" id="toastMessage">Ação concluída com sucesso.</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
             </div>
-
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhZ5OJhKYPg4HMlTl6ItQ0-c0rJZVrwx8&callback=initDetalheMapa" async defer></script>
 
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/ride-detail.js"></script>
 
 </body>
-
 </html>
