@@ -1,0 +1,284 @@
+/* HP-CSS-003 | Detalhe da carona: resumo da viagem, motorista, rota e acoes.
+   Esta tela concentra o fluxo passageiro: solicitar vaga e rever pedido. */
+
+.ride-detail-page {
+    padding: 1rem 1rem 6rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+    min-height: 100vh;
+}
+
+.driver-card,
+.route-card,
+.details-card,
+.notes-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.driver-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.driver-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+}
+
+.driver-info h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+}
+
+.driver-role-label {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: var(--text-light);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.driver-info p {
+    margin: 0.25rem 0 0;
+    color: var(--text-light);
+    font-size: 0.92rem;
+}
+
+.route-card h3,
+.details-card h3,
+.notes-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+}
+
+.route-timeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.route-line {
+    width: 3px;
+    min-height: 24px;
+    background: linear-gradient(180deg, var(--primary-color), #60a5fa);
+    border-radius: 999px;
+    flex: 0 0 3px;
+}
+
+.route-point {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 0.5rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.route-point.start {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.route-point.end {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item span {
+    color: var(--text-light);
+    font-size: 0.92rem;
+}
+
+.detail-item strong {
+    color: var(--secondary-color);
+    font-weight: 800;
+    font-size: 0.95rem;
+    text-align: right;
+}
+
+.notes-card p {
+    margin: 0;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.route-guidance {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem !important;
+    color: var(--text-light) !important;
+}
+
+#passengerRouteInfo {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.request-status-box {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* HP-PASS-002 | Lista visual de passageiros confirmados. Depende de
+   GET /api/rides/:rideId/passengers e nao deve mostrar dados sensiveis. */
+.confirmed-passengers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.confirmed-passengers-empty {
+    color: var(--text-light) !important;
+    font-size: 0.9rem;
+}
+
+.confirmed-passenger-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.confirmed-passenger-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.confirmed-passenger-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.confirmed-passenger-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.12rem;
+}
+
+.confirmed-passenger-info strong {
+    color: var(--secondary-color);
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+.confirmed-passenger-info span,
+.confirmed-passenger-info small {
+    color: var(--text-light);
+    font-size: 0.84rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.request-btn,
+.message-btn {
+    min-height: 50px;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+.message-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.request-btn.is-success {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+.request-btn.is-loading {
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .ride-detail-page {
+        max-width: 430px;
+        margin: 0 auto;
+    }
+
+    .route-timeline {
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .route-line {
+        flex: 0 1 32px;
+        width: auto;
+        height: 3px;
+        min-height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), #60a5fa);
+    }
+
+    .route-point {
+        flex: 1 1 0;
+    }
+}

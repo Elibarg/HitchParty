@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Caronas | HitchParty</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/search.css">
+</head>
+
+<body>
+    <div id="header-slot"></div>
+    <main class="search-page">
+        <button class="back-button" type="button" onclick="goBack()">← Voltar</button>
+
+
+        <section class="search-card">
+            <h2>Buscar Caronas</h2>
+            <form id="searchForm">
+                <div class="mb-3">
+                    <label class="form-label">Origem</label>
+                    <input
+                        type="text"
+                        id="origin"
+                        class="form-control"
+                        placeholder="De onde você vai sair?">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Destino</label>
+                    <input
+                        type="text"
+                        id="destination"
+                        class="form-control"
+                        placeholder="Para onde você vai?">
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100">
+                    Buscar
+                </button>
+            </form>
+        </section>
+
+        <section id="mapa-section" class="search-card d-none">
+            <h2>Rota da Viagem</h2>
+           <div id="meu-mapa" style="height: 250px; width: 100%; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);"></div>
+        </section>
+
+        <section>
+            <div id="ridesList" class="rides-list">
+            </div>
+        </section>
+        
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/search.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhZ5OJhKYPg4HMlTl6ItQ0-c0rJZVrwx8&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>

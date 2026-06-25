@@ -1,0 +1,231 @@
+/* HP-CSS-001 | Base global: reset leve, layout padrao, header e navegacao.
+   Estilos compartilhados ficam aqui para evitar repeticao entre telas. */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+
+    font-family: "Segoe UI", sans-serif;
+
+    background: var(--background-color);
+
+    color: var(--text-color);
+
+    min-height: 100vh;
+
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 36px;
+    margin-bottom: 1rem;
+    border: none;
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.25rem 0;
+}
+
+.back-button:hover {
+    color: var(--primary-dark);
+}
+/* ========================= */
+/* HEADER */
+/* ========================= */
+
+.app-header {
+
+    background: white;
+
+    padding: 1rem;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+}
+
+.header-container {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.brand-logo {
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 12px;
+
+    background: var(--primary-color);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: bold;
+
+}
+
+.brand h1 {
+
+    margin: 0;
+
+    font-size: 1rem;
+
+}
+
+.brand span {
+
+    font-size: 0.8rem;
+
+    color: var(--text-light);
+
+}
+
+.logout-btn {
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary-color);
+
+    font-weight: 600;
+
+}
+
+/* HP-CSS-002 | Navbar inferior fixa usada em telas autenticadas. Atencao:
+   paginas precisam reservar padding inferior para o menu nao cobrir conteudo. */
+
+.bottom-navbar {
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 72px;
+
+    background: #ffffff;
+
+    border-top: 1px solid #e5e7eb;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    z-index: 999;
+
+    box-shadow:
+        0 -4px 16px rgba(15,23,42,.05);
+}
+
+.nav-item {
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    text-decoration: none;
+
+    color: #64748b;
+
+    transition: all .2s ease;
+}
+
+.nav-item:hover {
+
+    color: var(--primary-color);
+}
+
+.nav-item.active {
+
+    color: var(--primary-color);
+}
+
+.nav-icon {
+
+    font-size: 1.25rem;
+
+    line-height: 1;
+}
+
+.nav-label {
+
+    font-size: .72rem;
+
+    font-weight: 600;
+}
+
+/* Botão Criar */
+
+.nav-item-create .nav-icon {
+
+    font-size: 1.6rem;
+}

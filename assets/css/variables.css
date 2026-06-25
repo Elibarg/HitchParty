@@ -1,0 +1,22 @@
+/* Variaveis globais de cor e espacamento do HitchParty. */
+
+:root {
+
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+
+    --secondary-color: #0f172a;
+
+    --background-color: #f8fafc;
+
+    --white: #ffffff;
+
+    --text-color: #1e293b;
+
+    --text-light: #64748b;
+
+    --border-radius: 16px;
+
+    --transition: 0.3s ease;
+
+}

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Configurações | HitchParty
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/settings.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="settings-page">
+        <button class="back-button" type="button" onclick="goBack()">← Voltar</button>
+
+
+        <!-- NOTIFICAÇÕES -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                PREFERÊNCIAS DE NOTIFICAÇÃO
+            </h2>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Novas solicitações
+                        </h3>
+
+                        <p>
+                            Avisar quando alguém solicitar uma vaga
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="newRequests"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Aprovação de carona
+                        </h3>
+
+                        <p>
+                            Avisar quando sua vaga for aprovada
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="rideApproval"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Cancelamentos
+                        </h3>
+
+                        <p>
+                            Avisar sobre caronas canceladas
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="rideCancellation"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Mensagens
+                        </h3>
+
+                        <p>
+                            Receber notificações de chat
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="chatNotifications">
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Lembretes de viagem
+                        </h3>
+
+                        <p>
+                            Lembrete 1h antes da carona
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="tripReminders"
+                            checked>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- PRIVACIDADE -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                PRIVACIDADE
+            </h2>
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Mostrar avaliação publicamente
+                        </h3>
+
+                        <p>
+                            Sua nota aparece para outros usuários
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="showRating"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Compartilhar telefone após aprovação
+                        </h3>
+
+                        <p>
+                            Seu número só fica visível após aprovação
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="sharePhone"
+                            checked>
+
+                    </div>
+
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+
+                        <h3>
+                            Foto de perfil pública
+                        </h3>
+
+                        <p>
+                            Outros usuários podem ver sua foto
+                        </p>
+
+                    </div>
+
+                    <div class="form-check form-switch">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="publicPhoto"
+                            checked>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- APLICATIVO -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                APLICATIVO
+            </h2>
+
+            <div class="settings-card">
+
+                <div class="setting-select">
+
+                    <label>
+                        Idioma
+                    </label>
+
+                    <select
+                        id="language"
+                        class="form-select">
+
+                        <option value="pt-BR">
+                            🇧🇷 Português
+                        </option>
+
+                        <option value="en-US">
+                            🇺🇸 English
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SOBRE -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                SOBRE
+            </h2>
+
+            <div class="settings-card">
+
+                <div class="about-row">
+
+                    <span>
+                        Versão
+                    </span>
+
+                    <strong>
+                        1.0.0
+                    </strong>
+
+                </div>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#termsModal">
+
+                    <span>
+                        Termos de Uso
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#privacyModal">
+
+                    <span>
+                        Política de Privacidade
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+                <button
+                    class="about-row-button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#supportModal">
+
+                    <span>
+                        Suporte
+                    </span>
+
+                    <span>
+                        ›
+                    </span>
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- CONTA -->
+
+        <section class="settings-section">
+
+            <h2 class="settings-title">
+                CONTA
+            </h2>
+
+            <div class="settings-card">
+
+                <button
+                    id="logoutAllBtn"
+                    class="btn btn-outline-warning w-100 mb-3">
+
+                    Encerrar Todas as Sessões
+
+                </button>
+
+                <button
+                    id="deleteAccountBtn"
+                    class="btn btn-outline-danger w-100">
+
+                    Excluir Conta
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <button
+            id="saveSettingsBtn"
+            class="btn btn-primary w-100 save-btn">
+
+            Salvar Configurações
+
+        </button>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <!-- MODAL TERMOS -->
+
+    <div
+        class="modal fade"
+        id="termsModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Termos de Uso
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        Os usuários do HitchParty devem respeitar as regras da plataforma,
+                        fornecer informações verdadeiras e utilizar o aplicativo de forma responsável.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL PRIVACIDADE -->
+
+    <div
+        class="modal fade"
+        id="privacyModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Política de Privacidade
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        Seus dados são utilizados apenas para funcionamento do HitchParty e não são compartilhados sem autorização.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL SUPORTE -->
+
+    <div
+        class="modal fade"
+        id="supportModal"
+        tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-scrollable">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Suporte
+                    </h5>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <p>
+                        E-mail:
+                        suporte@hitchparty.com
+                    </p>
+
+                    <p>
+                        Atendimento:
+                        Segunda a Sexta,
+                        das 08:00 às 18:00.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+
+        <div
+            id="feedbackToast"
+            class="toast text-bg-success border-0">
+
+            <div class="d-flex">
+
+                <div
+                    id="toastMessage"
+                    class="toast-body">
+
+                    Configurações salvas.
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+
+    <script src="../assets/js/settings.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+/* Busca de caronas: filtros, mapa e cards de resultado. */
+
+.search-page {
+    padding: 1rem 1rem 6rem;
+}
+
+.search-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 18px;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 20px rgba(15,23,42,.05);
+}
+
+.search-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.rides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.ride-card {
+
+    background: #c8dcf5;
+
+    border: 1px solid #c8dcf5;
+
+    border-radius: 18px;
+
+    padding: 1rem;
+}
+
+.ride-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: .75rem;
+}
+
+.driver-name {
+    font-weight: 700;
+}
+
+.route {
+    font-size: .95rem;
+    color: var(--text-light);
+}
+
+.ride-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: .75rem;
+
+    align-items: center;
+}
+
+.price {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.seats {
+    background: var(--primary-color);
+    color: white;
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    font-size: .8rem;
+}

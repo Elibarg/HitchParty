@@ -1,0 +1,10 @@
+{
+  "name": "hitchparty-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "backend": "npm --prefix Back-end start",
+    "backend:dev": "npm --prefix Back-end run dev",
+    "frontend": "node frontend-server.js"
+  }
+}

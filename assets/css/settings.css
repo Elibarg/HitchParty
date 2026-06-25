@@ -1,0 +1,231 @@
+/* Configuracoes: secoes de preferencias locais e controles da tela. */
+
+.settings-page {
+    min-height: 100vh;
+    padding: 1rem 0.75rem 7rem;
+    background: #f5f7fb;
+}
+
+/* =========================
+   SEÇÕES
+========================= */
+
+.settings-section {
+    margin-bottom: 1.25rem;
+}
+
+.settings-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 0.75rem;
+    padding-left: 0.2rem;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.settings-card {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    padding: 1rem;
+}
+
+/* =========================
+   LINHAS DE CONFIGURAÇÃO
+========================= */
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.setting-row:not(:last-child) {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.setting-row h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.setting-row p {
+    margin: 0.25rem 0 0;
+    color: #64748b;
+    font-size: 0.88rem;
+    line-height: 1.4;
+}
+
+/* =========================
+   SWITCHES
+========================= */
+
+.form-check-input {
+    width: 3rem;
+    height: 1.6rem;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+/* =========================
+   SELECT
+========================= */
+
+.setting-select {
+    padding: 1rem;
+}
+
+.setting-select label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.setting-select .form-select {
+    min-height: 52px;
+    border-radius: 16px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+}
+
+/* =========================
+   SOBRE
+========================= */
+
+.about-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.about-row:not(:last-child) {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.about-row strong {
+    color: #64748b;
+}
+
+.about-row-button {
+    width: 100%;
+    border: none;
+    background: transparent;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1rem;
+
+    text-align: left;
+
+    color: #0f172a;
+    font-size: 1rem;
+
+    transition: background 0.2s;
+}
+
+.about-row-button:hover {
+    background: #f8fafc;
+}
+
+.about-row-button:not(:last-child) {
+    border-top: 1px solid #e5e7eb;
+}
+
+.about-row-button span:last-child {
+    font-size: 1.3rem;
+    color: #94a3b8;
+}
+
+/* =========================
+   CONTA
+========================= */
+
+.settings-card .btn {
+    min-height: 52px;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+.settings-card .btn:first-child {
+    margin-bottom: 0.75rem;
+}
+
+/* =========================
+   BOTÃO SALVAR
+========================= */
+
+.save-btn {
+    min-height: 56px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* =========================
+   MODAIS
+========================= */
+
+.modal-content {
+    border-radius: 20px;
+    border: none;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.modal-body {
+    color: #475569;
+    line-height: 1.6;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e7eb;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    border-radius: 14px;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 768px) {
+
+    .settings-page {
+        max-width: 430px;
+        margin: 0 auto;
+    }
+
+}

@@ -1,0 +1,309 @@
+/* HP-QR-004 | Estilos da tela de QR visual. O QR e gerado no frontend a partir
+   do payload autorizado pelo backend. */
+/* =========================
+   PÁGINA
+========================= */
+
+.trip-qr-page {
+
+    min-height: 100vh;
+
+    padding: 1rem 0.75rem 7rem;
+
+    background: #f5f7fb;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.trip-card {
+
+    background: #ffffff;
+
+    border-radius: 24px;
+
+    padding: 1.5rem;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 10px 25px
+        rgba(15, 23, 42, 0.06);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.trip-header {
+
+    text-align: center;
+
+    margin-bottom: 1.5rem;
+}
+
+.trip-header h1 {
+
+    margin: 0;
+
+    font-size: 1.6rem;
+
+    font-weight: 800;
+
+    color: #0f172a;
+}
+
+.trip-header p {
+
+    margin-top: 0.5rem;
+
+    color: #64748b;
+
+    font-size: 0.95rem;
+}
+
+/* =========================
+   ROTA
+========================= */
+
+.trip-route {
+
+    background: #f8fafc;
+
+    border-radius: 18px;
+
+    padding: 1rem;
+
+    text-align: center;
+
+    margin-bottom: 1.5rem;
+}
+
+.origin,
+.destination {
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    color: #0f172a;
+}
+
+.arrow {
+
+    margin: 0.5rem 0;
+
+    font-size: 1.3rem;
+
+    color: var(--primary-color);
+}
+
+/* =========================
+   QR CODE
+========================= */
+
+.qr-container {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    margin-bottom: 1rem;
+}
+
+.qr-image {
+
+    width: 250px;
+    min-height: 250px;
+
+    max-width: 100%;
+
+    border-radius: 16px;
+
+    padding: 0.75rem;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+}
+
+.qr-image img,
+.qr-image canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* =========================
+   CÓDIGO
+========================= */
+
+.trip-code {
+
+    text-align: center;
+
+    font-size: 0.95rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    color: var(--primary-color);
+
+    margin-bottom: 1.5rem;
+}
+
+/* =========================
+   INFORMAÇÕES
+========================= */
+
+.trip-info {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.75rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0.85rem 1rem;
+
+    background: #f8fafc;
+
+    border-radius: 14px;
+}
+
+.info-item span {
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+}
+
+.info-item strong {
+
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.trip-status {
+
+    text-align: center;
+
+    background: #ecfdf5;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+
+    border-radius: 14px;
+
+    padding: 0.85rem;
+
+    font-weight: 700;
+
+    margin-bottom: 1.5rem;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.trip-actions {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.75rem;
+}
+
+.trip-actions .btn {
+
+    min-height: 52px;
+
+    border-radius: 14px;
+
+    font-weight: 700;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+
+    border-radius: 14px;
+}
+
+/* =========================
+   EFEITO TICKET
+========================= */
+
+.trip-card {
+
+    position: relative;
+}
+
+.trip-card::before,
+.trip-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 26px;
+
+    height: 26px;
+
+    background: #f5f7fb;
+
+    border-radius: 50%;
+}
+
+.trip-card::before {
+
+    left: -13px;
+
+    top: 50%;
+}
+
+.trip-card::after {
+
+    right: -13px;
+
+    top: 50%;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 768px) {
+
+    .trip-qr-page {
+
+        max-width: 430px;
+
+        margin: 0 auto;
+    }
+
+}

@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chat | HitchParty</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/chat.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="chat-page">
+        <button class="back-button" type="button" onclick="goBack()">← Voltar</button>
+
+
+        <section class="chat-ride-card">
+
+            <div class="chat-ride-top">
+
+                <div class="chat-driver-avatar" id="chatDriverAvatar">
+                    HP
+                </div>
+
+                <div class="chat-ride-info">
+
+                    <h1 id="chatDriverName">
+                        Motorista
+                    </h1>
+
+                    <p id="chatRideRoute">
+                        Origem → Destino
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="chat-ride-meta">
+
+                <span id="chatRideDate">--/--/----</span>
+                <span id="chatRideTime">--:--</span>
+                <span id="chatRideSeats">0 vagas</span>
+
+            </div>
+
+        </section>
+
+        <section class="messages-section">
+
+            <div id="messagesList" class="messages-list">
+                <!-- mensagens renderizadas pelo JS -->
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="chat-composer-shell">
+
+        <form id="chatForm" class="chat-composer">
+
+            <textarea
+                id="chatInput"
+                class="form-control chat-input"
+                rows="1"
+                placeholder="Digite sua mensagem..."></textarea>
+
+            <button
+                type="submit"
+                id="sendChatBtn"
+                class="btn btn-primary send-chat-btn"
+                disabled>
+
+                Enviar
+
+            </button>
+
+        </form>
+
+    </footer>
+
+    <div id="navbar-slot"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/chat.js"></script>
+
+</body>
+
+</html>

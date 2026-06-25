@@ -1,0 +1,77 @@
+/* Pagina inicial: apresentacao simples e atalhos de entrada. */
+
+.splash-screen {
+
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background: linear-gradient(
+        135deg,
+        var(--primary-color),
+        var(--primary-dark)
+    );
+
+    color: var(--white);
+
+    padding: 2rem;
+
+}
+
+.logo-container {
+
+    text-align: center;
+
+}
+
+.logo-icon {
+
+    width: 90px;
+    height: 90px;
+
+    margin: 0 auto 1rem;
+
+    border-radius: 24px;
+
+    background: var(--white);
+
+    color: var(--primary-color);
+
+    font-size: 2rem;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,.15);
+
+}
+
+.app-title {
+
+    font-size: 2rem;
+    font-weight: 700;
+
+}
+
+.app-subtitle {
+
+    margin-top: .75rem;
+
+    opacity: .9;
+
+    font-size: .95rem;
+
+}
+
+.loading-container {
+
+    margin-top: 3rem;
+
+}
