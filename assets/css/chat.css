@@ -1,3 +1,7 @@
+/* Chat: cabecalho da carona, bolhas de mensagem e compositor fixo. */
+
+/* HP-CHAT-005 | Layout do chat. A tela fica compacta e com composer fixo para
+   simular conversa mobile sem esconder o historico. */
 .chat-page {
     min-height: 100vh;
     padding: 1rem 1rem 8.5rem;

@@ -1,3 +1,5 @@
+/* Tela de cadastro: estrutura do formulario e responsividade inicial. */
+
 .register-page {
     min-height: 100vh;
     display: flex;

@@ -1,14 +1,9 @@
+// HP-USER-002 | Tela de perfil: carrega dados pelo JWT, renderiza informacoes
+// do usuario logado e envia atualizacoes para /api/profile.
+
 document.addEventListener("DOMContentLoaded", initializeProfile);
 
-let currentProfile = {
-    name: "Usuário",
-    email: "email@exemplo.com",
-    phone: "(00) 00000-0000",
-    ridesCount: 0,
-    vehiclesCount: 0,
-    messagesCount: 0,
-    ratingValue: 0.0
-};
+let currentProfile = null;
 
 async function initializeProfile() {
     if (!isAuthenticated()) {
@@ -17,7 +12,7 @@ async function initializeProfile() {
     }
 
     await loadComponents();
-    loadProfileData();
+    await loadProfileData();
     bindProfileForm();
     bindLogout();
 }
@@ -31,77 +26,76 @@ async function loadComponents() {
 
         if (headerResponse.ok) {
             document.getElementById("header-slot").innerHTML = await headerResponse.text();
-        } else {
-            console.warn("Não foi possível carregar header.html");
         }
 
         if (navbarResponse.ok) {
             document.getElementById("navbar-slot").innerHTML = await navbarResponse.text();
-        } else {
-            console.warn("Não foi possível carregar navbar.html");
         }
     } catch (error) {
         console.error("Erro ao carregar componentes:", error);
     }
 }
 
-function loadProfileData() {
+async function loadProfileData() {
     try {
-        const storedUser = localStorage.getItem(APP_CONFIG.USER_KEY);
+        // apiFetch envia o JWT; o backend usa req.user.id para buscar o perfil.
+        const response = await apiFetch("/profile");
 
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-
-            currentProfile = {
-                ...currentProfile,
-                name: user?.name || user?.fullName || currentProfile.name,
-                email: user?.email || currentProfile.email,
-                phone: user?.phone || currentProfile.phone,
-                ridesCount: user?.ridesCount ?? currentProfile.ridesCount,
-                vehiclesCount: user?.vehiclesCount ?? currentProfile.vehiclesCount,
-                messagesCount: user?.messagesCount ?? currentProfile.messagesCount,
-                ratingValue: user?.ratingValue ?? currentProfile.ratingValue
-            };
+        if (!response.ok) {
+            throw new Error("Erro ao carregar perfil.");
         }
-    } catch (error) {
-        console.warn("Erro ao ler perfil do localStorage:", error);
-    }
 
-    renderProfile(currentProfile);
-    fillEditForm(currentProfile);
+        const data = await response.json();
+        const updatedUser = normalizeUser(data?.data?.user || data?.user || {});
+        currentProfile = {
+            ...(currentProfile || {}),
+            ...updatedUser
+        };
+        saveUser(currentProfile);
+        renderProfile(currentProfile);
+        fillEditForm(currentProfile);
+    } catch (error) {
+        console.error(error);
+        currentProfile = null;
+        renderProfile(null);
+        showToast(error.message || "Erro ao carregar perfil.", "danger");
+    }
 }
 
 function renderProfile(profile) {
-    document.getElementById("profileName").textContent = profile.name;
-    document.getElementById("profileEmail").textContent = profile.email;
-    document.getElementById("profilePhone").textContent = profile.phone;
+    const safeProfile = profile || {};
+    const fullName = safeProfile.fullName || "Não informado";
+    const email = safeProfile.email || "Não informado";
+    const phone = safeProfile.phone || "Não informado";
 
-    document.getElementById("infoName").textContent = profile.name;
-    document.getElementById("infoEmail").textContent = profile.email;
-    document.getElementById("infoPhone").textContent = profile.phone;
+    document.getElementById("profileName").textContent = fullName;
+    document.getElementById("profileEmail").textContent = email;
+    document.getElementById("profilePhone").textContent = phone;
 
-    document.getElementById("profileRidesCount").textContent = profile.ridesCount;
-    document.getElementById("profileVehiclesCount").textContent = profile.vehiclesCount;
-    document.getElementById("profileMessagesCount").textContent = profile.messagesCount;
-    document.getElementById("profileRatingValue").textContent = Number(profile.ratingValue).toFixed(1);
+    document.getElementById("infoName").textContent = fullName;
+    document.getElementById("infoEmail").textContent = email;
+    document.getElementById("infoPhone").textContent = phone;
+
+    document.getElementById("profileRidesCount").textContent = safeProfile.ridesCount || 0;
+    document.getElementById("profileVehiclesCount").textContent = safeProfile.vehiclesCount || 0;
+    document.getElementById("profileMessagesCount").textContent = safeProfile.messagesCount || 0;
+    document.getElementById("profileRatingValue").textContent =
+        Number(safeProfile.ratingAverage || safeProfile.ratingValue || 0).toFixed(1);
 
     const avatar = document.getElementById("profileAvatar");
-    if (avatar && profile.name) {
-        const initials = profile.name
-            .split(" ")
-            .slice(0, 2)
-            .map(part => part[0])
-            .join("")
-            .toUpperCase();
-
-        avatar.textContent = initials;
+    if (avatar) {
+        avatar.textContent = safeProfile.fullName
+            ? getInitials(safeProfile.fullName)
+            : "--";
     }
 }
 
 function fillEditForm(profile) {
-    document.getElementById("editName").value = profile.name;
-    document.getElementById("editEmail").value = profile.email;
-    document.getElementById("editPhone").value = profile.phone;
+    const safeProfile = profile || {};
+
+    document.getElementById("editName").value = safeProfile.fullName || "";
+    document.getElementById("editEmail").value = safeProfile.email || "";
+    document.getElementById("editPhone").value = safeProfile.phone || "";
     document.getElementById("editPassword").value = "";
 }
 
@@ -120,12 +114,12 @@ async function handleSaveProfile() {
     const phoneInput = document.getElementById("editPhone");
     const passwordInput = document.getElementById("editPassword");
 
-    const name = nameInput.value.trim();
+    const fullName = nameInput.value.trim();
     const email = emailInput.value.trim();
     const phone = phoneInput.value.trim();
     const password = passwordInput.value;
 
-    if (!name || !email || !phone) {
+    if (!fullName || !email || !phone) {
         form.classList.add("was-validated");
         showToast("Preencha os campos obrigatórios.", "warning");
         return;
@@ -138,67 +132,52 @@ async function handleSaveProfile() {
     }
 
     const payload = {
-        name,
+        fullName,
         email,
         phone
     };
 
+    // Senha so e enviada quando o usuario preenche o campo no modal.
     if (password.trim()) {
         payload.password = password.trim();
     }
 
     try {
-        /*
-        BACKEND FUTURO
-
-        const response = await fetch(`${APP_CONFIG.API_URL}/users/me`, {
+        const response = await apiFetch("/profile", {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getToken()}`
-            },
             body: JSON.stringify(payload)
         });
 
         if (!response.ok) {
-            throw new Error("Erro ao atualizar perfil");
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Erro ao atualizar perfil.");
         }
 
-        const updatedUser = await response.json();
-        localStorage.setItem(APP_CONFIG.USER_KEY, JSON.stringify(updatedUser));
-        currentProfile = { ...currentProfile, ...updatedUser };
-        */
+        const data = await response.json();
+        currentProfile = normalizeUser(data?.data?.user || data?.user || {});
 
-        currentProfile = {
-            ...currentProfile,
-            name,
-            email,
-            phone
-        };
-
-        localStorage.setItem(
-            APP_CONFIG.USER_KEY,
-            JSON.stringify({
-                ...JSON.parse(localStorage.getItem(APP_CONFIG.USER_KEY) || "{}"),
-                name,
-                email,
-                phone
-            })
-        );
-
+        saveUser(currentProfile);
         renderProfile(currentProfile);
 
         const modalElement = document.getElementById("editProfileModal");
         const modal = bootstrap.Modal.getInstance(modalElement);
-        if (modal) {
-            modal.hide();
-        }
+        modal?.hide();
 
         showToast("Perfil atualizado com sucesso.", "success");
     } catch (error) {
         console.error(error);
-        showToast("Erro ao atualizar perfil.", "danger");
+        showToast(error.message || "Erro ao atualizar perfil.", "danger");
     }
+}
+
+function getInitials(name) {
+    return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0])
+        .join("")
+        .toUpperCase();
 }
 
 function validateEmail(email) {
@@ -216,24 +195,7 @@ function showToast(message, variant = "success") {
     toastElement.classList.remove("text-bg-success", "text-bg-danger", "text-bg-warning", "text-bg-info");
     toastElement.classList.add(`text-bg-${variant}`);
 
-    const toast = bootstrap.Toast.getOrCreateInstance(toastElement, {
-        delay: 3000
-    });
-
-    toast.show();
-}
-
-function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
-
-    if (!logoutButton) return;
-
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
-
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
-
-        window.location.href = "login.html";
-    });
+    bootstrap.Toast
+        .getOrCreateInstance(toastElement, { delay: 3000 })
+        .show();
 }

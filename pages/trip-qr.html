@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        QR da Viagem | HitchParty
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/trip-qr.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="trip-qr-page">
+        <button class="back-button" type="button" onclick="goBack()">← Voltar</button>
+
+
+        <section class="trip-card">
+
+            <div class="trip-header">
+
+                <h1>
+                    QR da Viagem
+                </h1>
+
+                <p>
+                    Apresente este QR Code ao motorista.
+                </p>
+
+            </div>
+
+            <div class="trip-route">
+
+                <div class="origin" id="qrOrigin">
+
+                    Origem
+
+                </div>
+
+                <div class="arrow">
+
+                    ↓
+
+                </div>
+
+                <div class="destination" id="qrDestination">
+
+                    Destino
+
+                </div>
+
+            </div>
+
+            <!-- QR -->
+
+            <div class="qr-container">
+
+                <div
+                    class="qr-image"
+                    id="qrImage"
+                    aria-label="QR Code da viagem">
+                </div>
+
+            </div>
+
+            <div class="trip-code" id="tripCode">
+
+                --
+
+            </div>
+
+            <div class="trip-info">
+
+                <div class="info-item">
+
+                    <span>
+                        Motorista
+                    </span>
+
+                    <strong id="qrDriverName">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="info-item">
+
+                    <span>
+                        Passageiro
+                    </span>
+
+                    <strong id="qrPassengerName">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="info-item">
+
+                    <span>
+                        Data
+                    </span>
+
+                    <strong id="qrRideDate">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="info-item">
+
+                    <span>
+                        Horário
+                    </span>
+
+                    <strong id="qrRideTime">
+                        Não informado
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="trip-status">
+
+                Pronto para embarque
+
+            </div>
+
+            <div class="trip-actions">
+
+                <button
+                    class="btn btn-primary w-100"
+                    id="shareQrBtn">
+
+                    Compartilhar QR
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <!-- TOAST -->
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+
+        <div
+            id="feedbackToast"
+            class="toast text-bg-success border-0">
+
+            <div class="d-flex">
+
+                <div
+                    id="toastMessage"
+                    class="toast-body">
+
+                    QR compartilhado.
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast">
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+
+    <script src="../assets/js/trip-qr.js"></script>
+
+</body>
+
+</html>

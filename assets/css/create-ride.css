@@ -1,3 +1,6 @@
+/* HP-MAPS-006 | Criacao de carona: formulario, campos de rota e area do Google
+   Maps. O CSS preserva espaco estavel para mapa/autocomplete no mobile. */
+
 .create-ride-page {
     padding: 1rem 1rem 6rem;
     min-height: 100vh;

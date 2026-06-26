@@ -1,21 +1,24 @@
+﻿// Tela de chat: carrega conversa autorizada, envia mensagens e atualiza o historico.
+
+// HP-CHAT-004 | Tela de chat: carrega conversa autorizada, envia mensagens e
+// atualiza historico real vindo de ride_messages.
 document.addEventListener("DOMContentLoaded", initializeChat);
 
-let chatMessages = [];
 let currentRide = null;
-let currentUserName = "Você";
+let currentUserId = null;
 
 async function initializeChat() {
+    // O chat depende de usuario autenticado e de uma carona aceita.
     if (!isAuthenticated()) {
         window.location.href = "login.html";
         return;
     }
 
     await loadComponents();
-    loadCurrentUser();
     bindLogout();
-    loadConversation();
     bindChatForm();
     setupAutoResize();
+    await loadConversation();
 }
 
 async function loadComponents() {
@@ -27,166 +30,126 @@ async function loadComponents() {
 
         if (headerResponse.ok) {
             document.getElementById("header-slot").innerHTML = await headerResponse.text();
-        } else {
-            console.warn("Não foi possível carregar header.html");
         }
 
         if (navbarResponse.ok) {
             document.getElementById("navbar-slot").innerHTML = await navbarResponse.text();
-        } else {
-            console.warn("Não foi possível carregar navbar.html");
         }
     } catch (error) {
         console.error("Erro ao carregar componentes:", error);
     }
 }
 
-function loadCurrentUser() {
+async function loadConversation() {
+    // O ID da carona vem da URL: chat.html?id=<rideId>.
+    const rideId = new URLSearchParams(window.location.search).get("id");
+
+    if (!rideId) {
+        renderEmptyRide();
+        renderMessages([]);
+        showComposerError("Selecione uma carona aceita para abrir o chat.");
+        return;
+    }
+
     try {
-        const storedUser = localStorage.getItem(APP_CONFIG.USER_KEY);
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-            currentUserName = user?.name || user?.fullName || "Você";
+        const response = await apiFetch(`/rides/${rideId}`);
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erro ao carregar carona.");
         }
+
+        currentRide = data?.data?.ride || null;
+
+        if (!currentRide) {
+            throw new Error("Carona não encontrada.");
+        }
+
+        renderRideHeader(currentRide);
+        await loadMessages(rideId);
     } catch (error) {
-        console.warn("Não foi possível ler o usuário do storage:", error);
+        console.error(error);
+        renderEmptyRide();
+        renderMessages([]);
+        showComposerError(error.message || "Chat indisponível.");
     }
 }
-function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
 
-    if (!logoutButton) return;
+async function loadMessages(rideId) {
+    // Chamada autenticada: backend valida se o usuario e motorista ou passageiro
+    // aceito antes de devolver o historico.
+    const response = await apiFetch(`/rides/${rideId}/messages`);
+    const data = await response.json().catch(() => ({}));
 
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
-        window.location.href = "login.html";
-    });
-}
+    if (!response.ok) {
+        throw new Error(data.message || "Erro ao carregar mensagens.");
+    }
 
-function loadConversation() {
-    const rideId = new URLSearchParams(window.location.search).get("id");
-    currentRide = getMockRideAndChat(rideId);
-
-    renderRideHeader(currentRide.ride);
-    chatMessages = currentRide.messages;
-    renderMessages();
-}
-
-function getMockRideAndChat(rideId) {
-    const mock = {
-        "1": {
-            ride: {
-                id: 1,
-                driverName: "Carlos Silva",
-                origin: "Joinville",
-                destination: "Blumenau",
-                date: "20/06/2026",
-                time: "07:10",
-                seats: 2
-            },
-            messages: [
-                {
-                    sender: "driver",
-                    text: "Olá! Ainda temos duas vagas disponíveis.",
-                    time: "07:05"
-                },
-                {
-                    sender: "me",
-                    text: "Ótimo. Gostaria de confirmar uma vaga.",
-                    time: "07:06"
-                },
-                {
-                    sender: "driver",
-                    text: "Perfeito, pode deixar reservado.",
-                    time: "07:07"
-                }
-            ]
-        },
-        "2": {
-            ride: {
-                id: 2,
-                driverName: "Ana Souza",
-                origin: "Joinville",
-                destination: "Curitiba",
-                date: "21/06/2026",
-                time: "08:00",
-                seats: 3
-            },
-            messages: [
-                {
-                    sender: "driver",
-                    text: "Bom dia! Saída às 08:00.",
-                    time: "08:10"
-                },
-                {
-                    sender: "me",
-                    text: "Tudo certo, obrigado!",
-                    time: "08:11"
-                }
-            ]
-        }
-    };
-
-    return mock[rideId] || {
-        ride: {
-            id: rideId || 0,
-            driverName: "Motorista",
-            origin: "Origem",
-            destination: "Destino",
-            date: "--/--/----",
-            time: "--:--",
-            seats: 0
-        },
-        messages: [
-            {
-                sender: "driver",
-                text: "Olá! Me diga como posso ajudar.",
-                time: "Agora"
-            }
-        ]
-    };
+    currentUserId = data?.data?.currentUserId;
+    renderMessages(data?.data?.messages || []);
 }
 
 function renderRideHeader(ride) {
-    document.getElementById("chatDriverName").textContent = ride.driverName;
-    document.getElementById("chatRideRoute").textContent = `${ride.origin} → ${ride.destination}`;
-    document.getElementById("chatRideDate").textContent = ride.date;
-    document.getElementById("chatRideTime").textContent = ride.time;
-    document.getElementById("chatRideSeats").textContent = `${ride.seats} vagas`;
+    document.getElementById("chatDriverName").textContent = ride.driverName || ride.driver || "Motorista";
+    document.getElementById("chatRideRoute").textContent = ride.route || `${ride.origin} -> ${ride.destination}`;
+    document.getElementById("chatRideDate").textContent = ride.date || "--/--/----";
+    document.getElementById("chatRideTime").textContent = ride.time || "--:--";
+    document.getElementById("chatRideSeats").textContent = formatarVagas(ride.availableSeats ?? ride.seats);
 
     const avatar = document.getElementById("chatDriverAvatar");
-    if (avatar && ride.driverName) {
-        const initials = ride.driverName
-            .split(" ")
-            .slice(0, 2)
-            .map(part => part[0])
-            .join("")
-            .toUpperCase();
-
-        avatar.textContent = initials;
+    if (avatar) {
+        avatar.textContent = ride.driverName ? getInitials(ride.driverName) : "HP";
     }
 }
 
-function renderMessages() {
+function renderEmptyRide() {
+    document.getElementById("chatDriverName").textContent = "Carona não informada";
+    document.getElementById("chatRideRoute").textContent = "Nenhuma carona selecionada";
+    document.getElementById("chatRideDate").textContent = "--/--/----";
+    document.getElementById("chatRideTime").textContent = "--:--";
+    document.getElementById("chatRideSeats").textContent = "0 vagas";
+}
+
+function renderMessages(messages) {
     const container = document.getElementById("messagesList");
 
-    container.innerHTML = chatMessages.map(message => {
-        const rowClass = message.sender === "me" ? "sent" : "received";
-        const senderLabel = message.sender === "me" ? currentUserName : currentRide.ride.driverName;
-
-        return `
-            <div class="message-row ${rowClass}">
-                <div class="message-bubble">
-                    <div>${escapeHtml(message.text)}</div>
-                    <span class="message-meta">${senderLabel} • ${message.time}</span>
-                </div>
+    if (!messages.length) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>Nenhuma mensagem ainda.</h3>
+                <p>Envie a primeira mensagem.</p>
             </div>
         `;
-    }).join("");
+        return;
+    }
 
-    scrollToBottom();
+    container.textContent = "";
+
+    messages.forEach(message => {
+        const row = document.createElement("div");
+        const isSent = Number(message.senderId) === Number(currentUserId);
+
+        row.className = `message-row ${isSent ? "sent" : "received"}`;
+
+        const bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+
+        const text = document.createElement("div");
+        text.textContent = message.message;
+
+        const meta = document.createElement("span");
+        meta.className = "message-meta";
+        meta.textContent = [
+            isSent ? "Você" : message.senderName,
+            formatMessageDate(message.createdAt)
+        ].filter(Boolean).join(" • ");
+
+        bubble.append(text, meta);
+        row.appendChild(bubble);
+        container.appendChild(row);
+    });
+
+    container.scrollTop = container.scrollHeight;
 }
 
 function bindChatForm() {
@@ -196,36 +159,55 @@ function bindChatForm() {
 
     if (!form || !input || !sendButton) return;
 
-    const updateButtonState = () => {
-        sendButton.disabled = !input.value.trim();
-    };
-
     input.addEventListener("input", () => {
-        updateButtonState();
+        sendButton.disabled = !input.value.trim();
         autoResizeTextarea(input);
     });
 
-    input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            if (!sendButton.disabled) {
-                form.requestSubmit();
-            }
-        }
-    });
-
-    form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", async event => {
         event.preventDefault();
-        await handleSendMessage();
+        await sendMessage();
     });
+}
 
-    updateButtonState();
+async function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const sendButton = document.getElementById("sendChatBtn");
+    const rideId = new URLSearchParams(window.location.search).get("id");
+    const message = input?.value.trim();
+
+    if (!rideId || !message) return;
+
+    try {
+        sendButton.disabled = true;
+
+        // Envia apenas o texto; sender/receiver sao resolvidos pelo backend.
+        const response = await apiFetch(`/rides/${rideId}/messages`, {
+            method: "POST",
+            body: JSON.stringify({ message })
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erro ao enviar mensagem.");
+        }
+
+        input.value = "";
+        autoResizeTextarea(input);
+        await loadMessages(rideId);
+    } catch (error) {
+        console.error(error);
+        showComposerError(error.message || "Erro ao enviar mensagem.");
+    } finally {
+        sendButton.disabled = !input?.value.trim();
+    }
 }
 
 function setupAutoResize() {
     const input = document.getElementById("chatInput");
-    if (!input) return;
-    autoResizeTextarea(input);
+    if (input) {
+        autoResizeTextarea(input);
+    }
 }
 
 function autoResizeTextarea(textarea) {
@@ -233,79 +215,49 @@ function autoResizeTextarea(textarea) {
     textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
 }
 
-async function handleSendMessage() {
-    const input = document.getElementById("chatInput");
-    const sendButton = document.getElementById("sendChatBtn");
-    const message = input.value.trim();
+function showComposerError(message) {
+    const container = document.getElementById("messagesList");
 
-    if (!message) return;
-
-    try {
-        /*
-        BACKEND FUTURO
-
-        const rideId = new URLSearchParams(window.location.search).get("id");
-
-        const response = await fetch(`${APP_CONFIG.API_URL}/chats/${rideId}/messages`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({
-                message
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error("Erro ao enviar mensagem");
-        }
-        */
-
-        sendButton.disabled = true;
-
-        await new Promise(resolve => setTimeout(resolve, 450));
-
-        chatMessages.push({
-            sender: "me",
-            text: message,
-            time: getCurrentTime()
-        });
-
-        input.value = "";
-        autoResizeTextarea(input);
-        renderMessages();
-
-        sendButton.disabled = true;
-    } catch (error) {
-        console.error(error);
-        alert("Erro ao enviar mensagem.");
-        sendButton.disabled = false;
-    }
+    container.innerHTML = `
+        <div class="empty-state">
+            <h3>Chat indisponível.</h3>
+            <p>${escapeHtml(message)}</p>
+        </div>
+    `;
 }
 
-function scrollToBottom() {
-    window.requestAnimationFrame(() => {
-        window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: "smooth"
-        });
-    });
+function formatarVagas(seats) {
+    const total = Number(seats || 0);
+
+    return `${total} ${total === 1 ? "vaga" : "vagas"}`;
 }
 
-function getCurrentTime() {
-    const now = new Date();
-    return now.toLocaleTimeString("pt-BR", {
+function getInitials(name) {
+    return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0])
+        .join("")
+        .toUpperCase();
+}
+
+function formatMessageDate(value) {
+    if (!value) return "";
+
+    return new Date(value).toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
         hour: "2-digit",
         minute: "2-digit"
     });
 }
 
-function escapeHtml(text) {
-    return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+function escapeHtml(value = "") {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

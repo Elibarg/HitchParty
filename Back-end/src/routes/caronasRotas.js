@@ -1,24 +1,29 @@
-/**
- * ============================================================================
- * ROTAS DE CARONAS
- * ============================================================================
- * Mapeamento das URLs (endereços) relacionadas às viagens.
- */
-
 const express = require('express');
-const rotas = express.Router();
-
-// Importação do controlador que contém a inteligência das caronas
+const authMiddleware = require('../middlewares/authMiddleware');
 const caronasController = require('../controllers/caronasController');
+const chatController = require('../controllers/chatController');
+const qrController = require('../controllers/qrController');
 
-/*
- * ROTA: Listar todas as caronas
- * MÉTODO: GET (Utilizado para buscar/ler informações, não para criar)
- * ENDPOINT ACESSADO: /api/rides/search
- * * Quando o Front-end fizer um GET para "/search", o Express direcionará 
- * o pedido automaticamente para a função "buscarCaronas" no controlador.
- */
-rotas.get('/search', caronasController.buscarCaronas);
+const routes = express.Router();
 
-// Exporta este grupo de rotas para ser ligado no ficheiro principal (index.js)
-module.exports = rotas;
+// HP-RIDE-004 | Rotas de carona. Busca publica lista viagens disponiveis;
+// criacao, detalhes, solicitacoes, chat e QR exigem JWT por dependerem do usuario.
+routes.get('/', caronasController.buscarCaronas);
+routes.get('/search', caronasController.buscarCaronas);
+routes.get('/upcoming', authMiddleware, caronasController.listarProximas);
+routes.get('/history', authMiddleware, caronasController.listarHistorico);
+routes.get('/:rideId/messages', authMiddleware, chatController.listarMensagens);
+routes.post('/:rideId/messages', authMiddleware, chatController.enviarMensagem);
+routes.get('/:rideId/qr', authMiddleware, qrController.buscarQr);
+routes.get('/:rideId/my-request', authMiddleware, caronasController.buscarMinhaSolicitacao);
+routes.get('/:rideId/passengers', authMiddleware, caronasController.listarPassageirosConfirmados);
+routes.get('/:rideId', authMiddleware, caronasController.buscarCaronaPorId);
+routes.post('/', authMiddleware, caronasController.criarCarona);
+routes.put('/:rideId', authMiddleware, caronasController.editarCarona);
+routes.patch('/:rideId/cancel', authMiddleware, caronasController.cancelarCarona);
+routes.post('/:rideId/confirm-change', authMiddleware, caronasController.confirmarAlteracao);
+routes.post('/:rideId/reject-change', authMiddleware, caronasController.rejeitarAlteracao);
+routes.post('/:rideId/requests', authMiddleware, caronasController.solicitarCarona);
+routes.get('/:rideId/requests', authMiddleware, caronasController.listarSolicitacoesDaCarona);
+
+module.exports = routes;

@@ -1,15 +1,17 @@
+// Dashboard: carrega perfil, proximas caronas e atividades recentes do usuario logado.
+
 document.addEventListener("DOMContentLoaded", initializeDashboard);
 
 async function initializeDashboard() {
+    // Dashboard usa dados privados, entao exige token salvo pelo login.
     if (!isAuthenticated()) {
         window.location.href = "login.html";
         return;
     }
 
     await loadComponents();
-    loadUserInfo();
-    bindLogout(); 
-    loadDashboardData();
+    bindLogout();
+    await loadDashboardData();
 }
 
 async function loadComponents() {
@@ -34,145 +36,334 @@ async function loadComponents() {
     }
 }
 
-function loadUserInfo() {
-    const userNameElement = document.getElementById("userName");
+function loadUserInfo(user = getStoredUser()) {
+    const userNameElement =
+        document.getElementById("fullName")
+        || document.getElementById("name");
 
-    let userName = "Usuário";
+    if (!userNameElement) return;
 
+    userNameElement.textContent = getFirstName(user);
+}
+
+async function loadDashboardData() {
     try {
-        const storedUser = localStorage.getItem(APP_CONFIG.USER_KEY);
+        // Carrega dados em paralelo para reduzir espera na primeira tela apos login.
+        const [profileResponse, ridesResponse, notificationsResponse] =
+            await Promise.all([
+                apiFetch("/profile"),
+                apiFetch("/rides/upcoming"),
+                apiFetch("/notifications")
+            ]);
 
-        if (storedUser) {
-            const user = JSON.parse(storedUser);
-            userName = user?.name || user?.fullName || "Usuário";
+        if (
+            !profileResponse.ok
+            || !ridesResponse.ok
+            || !notificationsResponse.ok
+        ) {
+            throw new Error("Erro ao carregar dashboard.");
         }
-    } catch (error) {
-        console.warn("Usuário inválido no storage:", error);
-    }
 
-    userNameElement.textContent = userName;
-}
+        const [profileData, ridesData, notificationsData] =
+            await Promise.all([
+                profileResponse.json(),
+                ridesResponse.json(),
+                notificationsResponse.json()
+            ]);
 
-function bindLogout() {
-    const logoutButton = document.getElementById("logoutButton");
+        const user = normalizeUser(profileData?.data?.user || {});
+        const rides = ridesData?.data?.rides || [];
+        const notifications = notificationsData?.data?.notifications || [];
 
-    if (!logoutButton) return;
-
-    logoutButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        removeToken();
-        localStorage.removeItem(APP_CONFIG.USER_KEY);
-        window.location.href = "login.html";
-    });
-}
-
-function loadDashboardData() {
-    /*
-        BACKEND FUTURO
-
-        const response = await fetch(`${APP_CONFIG.API_URL}/dashboard`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`
-            }
+        saveUser(user);
+        loadUserInfo(user);
+        renderStats({
+            ridesCount: user.ridesCount || 0,
+            vehiclesCount: user.vehiclesCount || 0,
+            messagesCount: user.messagesCount || 0,
+            ratingValue: user.ratingAverage || 0
         });
-
-        const data = await response.json();
-        renderDashboard(data);
-    */
-
-    const mockData = {
-        stats: {
+        renderNotifications(notifications);
+        showPendingNotificationPopup(notifications);
+        renderUpcomingRides(rides);
+        renderRecentActivity([]);
+    } catch (error) {
+        console.error(error);
+        loadUserInfo();
+        renderStats({
             ridesCount: 0,
             vehiclesCount: 0,
             messagesCount: 0,
-            ratingValue: 0.0
-        },
-        upcomingRides: [
-            {
-                route: "Centro → Bairro Sul",
-                date: "Hoje, 18:30",
-                seat: "2 vagas",
-                price: "R$ 12,00"
-            },
-            {
-                route: "Joinville → Blumenau",
-                date: "Amanhã, 07:10",
-                seat: "1 vaga",
-                price: "R$ 28,00"
-            },
-            {
-                route: "Universidade → Terminal",
-                date: "Sex, 12:20",
-                seat: "3 vagas",
-                price: "R$ 8,00"
-            }
-        ],
-        recentActivity: [
-            {
-                title: "Você recebeu uma nova solicitação",
-                meta: "há 12 min"
-            },
-            {
-                title: "Sua carona foi confirmada",
-                meta: "há 1 hora"
-            },
-            {
-                title: "Novo veículo adicionado",
-                meta: "ontem"
-            }
-        ]
-    };
+            ratingValue: 0
+        });
+        renderNotifications([]);
+        renderUpcomingRides([]);
+        renderRecentActivity([]);
+    }
+}
 
-    renderStats(mockData.stats);
-    renderUpcomingRides(mockData.upcomingRides);
-    renderRecentActivity(mockData.recentActivity);
+function renderNotifications(notifications) {
+    // Exibe notificacoes persistentes na tela Inicio.
+    const list = document.getElementById("notificationsList");
+    list.textContent = "";
+
+    const visibleNotifications = notifications.filter(
+        notification => notification.status !== "resolved"
+    );
+
+    if (!visibleNotifications.length) {
+        const emptyState = document.createElement("div");
+        emptyState.className = "notifications-empty";
+        emptyState.textContent = "Nenhum aviso pendente.";
+        list.appendChild(emptyState);
+        return;
+    }
+
+    visibleNotifications.forEach(notification => {
+        const card = document.createElement("article");
+        card.className = "notification-card";
+
+        const title = document.createElement("h3");
+        title.textContent = notification.title || "Aviso";
+
+        const message = document.createElement("p");
+        message.textContent = notification.message || "";
+
+        const actions = document.createElement("div");
+        actions.className = "notification-actions";
+
+        if (notification.type === "ride_updated" && notification.actionRequired) {
+            const acceptButton = document.createElement("button");
+            acceptButton.className = "btn btn-success btn-sm";
+            acceptButton.textContent = "Aceitar alteração";
+            acceptButton.addEventListener("click", () => respondRideChange(notification, "accept"));
+
+            const rejectButton = document.createElement("button");
+            rejectButton.className = "btn btn-outline-danger btn-sm";
+            rejectButton.textContent = "Rejeitar alteração";
+            rejectButton.addEventListener("click", () => respondRideChange(notification, "reject"));
+
+            actions.append(acceptButton, rejectButton);
+        } else if (notification.status === "unread") {
+            const readButton = document.createElement("button");
+            readButton.className = "btn btn-outline-primary btn-sm";
+            readButton.textContent = "Marcar como lida";
+            readButton.addEventListener("click", () => markNotificationRead(notification.id));
+            actions.appendChild(readButton);
+        }
+
+        card.append(title, message, actions);
+        list.appendChild(card);
+    });
+}
+
+function showPendingNotificationPopup(notifications) {
+    // Mostra popup para notificacao acionavel de alteracao.
+    const notification = notifications.find(item =>
+        item.type === "ride_updated"
+        && item.actionRequired
+        && item.status !== "resolved"
+    );
+
+    if (!notification || !window.bootstrap) return;
+
+    let modalElement = document.getElementById("notificationModal");
+
+    if (!modalElement) {
+        modalElement = document.createElement("div");
+        modalElement.id = "notificationModal";
+        modalElement.className = "modal fade";
+        modalElement.tabIndex = -1;
+        modalElement.innerHTML = `
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="modal-message"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" id="modalRejectRideChange">Rejeitar alteração</button>
+                        <button type="button" class="btn btn-success" id="modalAcceptRideChange">Aceitar alteração</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modalElement);
+    }
+
+    modalElement.querySelector(".modal-title").textContent = notification.title;
+    modalElement.querySelector(".modal-message").textContent = notification.message;
+    modalElement.querySelector("#modalAcceptRideChange").onclick =
+        () => respondRideChange(notification, "accept");
+    modalElement.querySelector("#modalRejectRideChange").onclick =
+        () => respondRideChange(notification, "reject");
+
+    bootstrap.Modal.getOrCreateInstance(modalElement).show();
+}
+
+async function respondRideChange(notification, action) {
+    const endpoint = action === "accept"
+        ? `/rides/${notification.rideId}/confirm-change`
+        : `/rides/${notification.rideId}/reject-change`;
+
+    try {
+        const response = await apiFetch(endpoint, { method: "POST" });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || "Erro ao responder alteração.");
+        }
+
+        const modalElement = document.getElementById("notificationModal");
+        if (modalElement) {
+            bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+        }
+
+        await loadDashboardData();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Erro ao responder alteração.");
+    }
+}
+
+async function markNotificationRead(notificationId) {
+    await apiFetch(`/notifications/${notificationId}/read`, {
+        method: "PATCH"
+    });
+    await loadDashboardData();
 }
 
 function renderStats(stats) {
     document.getElementById("ridesCount").textContent = stats.ridesCount;
     document.getElementById("vehiclesCount").textContent = stats.vehiclesCount;
     document.getElementById("messagesCount").textContent = stats.messagesCount;
-    document.getElementById("ratingValue").textContent = stats.ratingValue.toFixed(1);
+    document.getElementById("ratingValue").textContent = Number(stats.ratingValue || 0).toFixed(1);
 }
 
 function renderUpcomingRides(rides) {
     const list = document.getElementById("upcomingRidesList");
+    list.textContent = "";
 
     if (!rides.length) {
-        list.innerHTML = `<div class="rides-empty">Você ainda não tem caronas agendadas.</div>`;
+        const emptyState = document.createElement("div");
+        emptyState.className = "rides-empty";
+        emptyState.textContent = "Você ainda não tem caronas agendadas.";
+        list.appendChild(emptyState);
         return;
     }
 
-    list.innerHTML = rides.map(ride => `
-        <article class="ride-card">
-            <div class="ride-top">
-                <div>
-                    <p class="ride-route">${ride.route}</p>
-                    <p class="ride-meta">${ride.date}</p>
-                </div>
-                <span class="ride-badge">${ride.seat}</span>
-            </div>
+    rides.forEach(ride => {
+        const card = document.createElement("article");
+        card.className = "ride-card";
 
-            <div class="ride-bottom">
-                <span class="ride-price">${ride.price}</span>
-                <a href="ride-detail.html" class="ride-link">Ver detalhes</a>
-            </div>
-        </article>
-    `).join("");
+        const top = document.createElement("div");
+        top.className = "ride-top";
+
+        const textGroup = document.createElement("div");
+
+        const route = document.createElement("p");
+        route.className = "ride-route";
+        route.textContent = ride.route || montarRota(ride);
+
+        const date = document.createElement("p");
+        date.className = "ride-meta";
+        date.textContent = [ride.date, ride.time].filter(Boolean).join(" às ");
+
+        const badge = document.createElement("span");
+        badge.className = "ride-badge";
+        badge.textContent = ride.passengerStatus === "PENDING_CHANGE_CONFIRMATION"
+            ? "confirmação pendente"
+            : formatarVagas(ride.availableSeats ?? ride.seats);
+
+        const bottom = document.createElement("div");
+        bottom.className = "ride-bottom";
+
+        const price = document.createElement("span");
+        price.className = "ride-price";
+        price.textContent = ride.price || formatarMoeda(ride.suggestedPrice);
+
+        const detailsLink = document.createElement("a");
+        detailsLink.href = `ride-detail.html?id=${encodeURIComponent(ride.id)}`;
+        detailsLink.className = "ride-link";
+        detailsLink.textContent = "Ver detalhes";
+
+        const chatLink = document.createElement("a");
+        chatLink.href = `chat.html?id=${encodeURIComponent(ride.id)}`;
+        chatLink.className = "ride-link";
+        chatLink.textContent = "Chat";
+
+        const qrLink = document.createElement("a");
+        qrLink.href = `trip-qr.html?id=${encodeURIComponent(ride.id)}`;
+        qrLink.className = "ride-link";
+        qrLink.textContent = "QR";
+
+        textGroup.append(route, date);
+        top.append(textGroup, badge);
+        bottom.append(price, detailsLink, chatLink, qrLink);
+        card.append(top, bottom);
+        list.appendChild(card);
+    });
 }
 
 function renderRecentActivity(items) {
     const list = document.getElementById("recentActivityList");
+    list.textContent = "";
 
     if (!items.length) {
-        list.innerHTML = `<div class="activity-empty">Nenhuma atividade recente.</div>`;
+        const emptyState = document.createElement("div");
+        emptyState.className = "activity-empty";
+        emptyState.textContent = "Nenhuma atividade recente.";
+        list.appendChild(emptyState);
         return;
     }
 
-    list.innerHTML = items.map(item => `
-        <article class="activity-card">
-            <h3 class="activity-title">${item.title}</h3>
-            <p class="activity-meta">${item.meta}</p>
-        </article>
-    `).join("");
+    items.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "activity-card";
+
+        const title = document.createElement("h3");
+        title.className = "activity-title";
+        title.textContent = item.title || item.message || "Atividade";
+
+        const meta = document.createElement("p");
+        meta.className = "activity-meta";
+        meta.textContent = item.meta || formatarDataRelativa(item.createdAt);
+
+        card.append(title, meta);
+        list.appendChild(card);
+    });
+}
+
+function montarRota(ride) {
+    const origin = ride.origin || "Origem não informada";
+    const destination = ride.destination || "Destino não informado";
+
+    return `${origin} → ${destination}`;
+}
+
+function formatarVagas(seats) {
+    const total = Number(seats || 0);
+
+    return `${total} ${total === 1 ? "vaga" : "vagas"}`;
+}
+
+function formatarMoeda(value) {
+    const numberValue = Number(value || 0);
+
+    return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    }).format(numberValue);
+}
+
+function formatarDataRelativa(value) {
+    if (!value) return "";
+
+    return new Date(value).toLocaleString("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "short"
+    });
 }

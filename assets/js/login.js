@@ -3,7 +3,10 @@ document.addEventListener(
     initializeLogin
 );
 
+// HP-FRONT-002 | Login: envia credenciais para a API, recebe JWT e salva apenas
+// token + dados nao sensiveis para as telas protegidas.
 function initializeLogin() {
+    // Controla login, credenciais e sessao local segura.
 
     setupPasswordToggle();
 
@@ -23,14 +26,15 @@ function setupPasswordToggle() {
             "password"
         );
 
+    // Alterna apenas a visualizacao da senha, sem alterar o valor digitado.
     toggleButton.addEventListener(
         "click",
         () => {
 
             passwordInput.type =
                 passwordInput.type === "password"
-                ? "text"
-                : "password";
+                    ? "text"
+                    : "password";
 
         }
     );
@@ -52,6 +56,7 @@ function setupLoginForm() {
 }
 
 async function handleLogin(event) {
+    // Envia credenciais para a API e processa JWT recebido.
     event.preventDefault();
 
     const form = event.target;
@@ -62,17 +67,13 @@ async function handleLogin(event) {
         return;
     }
 
+    // Entrada da API: e-mail e senha informados no formulario.
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const rememberMe = document.getElementById("rememberMe").checked;
-
     try {
-        // CÓDIGO REAL: O front-end envia o pedido para a porta 8080 do Back-end
-        const response = await fetch(`${APP_CONFIG.API_URL}/auth/login`, {
+        // Chamada para API: envia credenciais para o backend autenticar.
+        const response = await apiFetch("/auth/login", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify({
                 email,
                 password
@@ -89,15 +90,33 @@ async function handleLogin(event) {
         // Se a senha estiver correta, recebe os dados
         const data = await response.json();
 
+        const loginData = data.data || {};
+        const user = loginData.user;
+        const token = loginData.token;
+
+        if (!user || !token) {
+            throw new Error("Resposta de login inválida.");
+        }
+
         // Salva o token real no navegador e entra no Dashboard
-        saveToken(data.token);
-        
-        console.log("Opção Lembrar-me:", rememberMe);
+        // HP-AUTH-010 | Salva JWT para apiFetch autorizar paginas protegidas.
+        saveToken(token);
+
+        // salva os dados do usuário
+        // Dados nao sensiveis do usuario ficam no localStorage para exibicao
+        // em dashboard/perfil sem nova chamada imediata para a API.
+        // Guarda apenas dados nao sensiveis para exibicao imediata.
+        saveUser(user);
 
         window.location.href = "dashboard.html";
 
+
+
+
     } catch (error) {
         console.error("Erro no login:", error);
+        // Tratamento de erro: mantem o usuario na tela e mostra a mensagem da
+        // API ou a validacao feita acima.
         // Trava na tela e exibe o alerta de senha errada
         alert(error.message);
     }

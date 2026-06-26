@@ -1,6 +1,11 @@
+// Cadastro: valida formulario inicial e cria usuario no backend.
+
 document.addEventListener("DOMContentLoaded", initializeRegister);
 
+// HP-FRONT-003 | Cadastro: valida formulario no navegador e envia dados para
+// authController -> authService -> usuarioRepository -> users.
 function initializeRegister() {
+    // Inicializa validacoes e envio do cadastro para a API.
     setupPasswordToggles();
     setupRegisterForm();
 }
@@ -11,6 +16,7 @@ function setupPasswordToggles() {
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");
 
+    // Alterna a visualizacao dos campos de senha sem modificar os valores.
     togglePassword.addEventListener("click", () => {
         passwordInput.type = passwordInput.type === "password" ? "text" : "password";
     });
@@ -26,11 +32,14 @@ function setupRegisterForm() {
 }
 
 async function handleRegister(event) {
+    // Monta payload minimo para criar usuario no backend.
     event.preventDefault();
 
     const form = event.target;
 
-    const name = document.getElementById("name").value.trim();
+    // Entrada enviada ao backend em camelCase, seguindo o contrato do
+    // authController/authService.
+    const fullName = document.getElementById("fullName").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
@@ -40,6 +49,7 @@ async function handleRegister(event) {
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirmPassword");
 
+    // Limpa validacoes customizadas antes de recalcular as regras do formulario.
     passwordInput.setCustomValidity("");
     confirmPasswordInput.setCustomValidity("");
 
@@ -61,20 +71,18 @@ async function handleRegister(event) {
         return;
     }
 
+    // Payload da API: somente os campos necessarios para criar usuario.
     const payload = {
-        name,
+        fullName,
         email,
         phone,
         password
     };
 
-  try {
-        // CÓDIGO REAL DA API
-        const response = await fetch(`${APP_CONFIG.API_URL}/auth/register`, {
+    try {
+        // Chamada para API: cria a conta no backend Node.
+        const response = await apiFetch("/auth/register", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: JSON.stringify(payload)
         });
 
@@ -85,13 +93,40 @@ async function handleRegister(event) {
 
         const data = await response.json();
 
-        // O alerta verdadeiro que só aparece se a API responder com sucesso
-        alert("Conta criada com sucesso no Banco de Dados!");
+        /* ==========================================================
+        NOTIFICAÇÃO DE SUCESSO DO CADASTRO
+        ----------------------------------------------------------
+        Esta notificação é exibida somente quando a API confirma
+        que o usuário foi cadastrado com sucesso.
 
-        window.location.href = "login.html";
+        Após 3 segundos, o usuário é redirecionado automaticamente
+        para a tela de login.
+        ========================================================== */
+         Swal.fire({
+             icon: "success",
+             title: "Cadastro realizado!",
+             html: `
+                    <b>Bem-vindo ao HitchParty!</b><br><br>
+                    Sua conta foi criada com sucesso.<br>
+                    Você será redirecionado para a tela de login.
+                `,
+             timer: 2500,
+             timerProgressBar: true,
+             showConfirmButton: false,
+             allowOutsideClick: false,
+             allowEscapeKey: false
+            });
+
+        // Aguarda o tempo da notificação antes de redirecionar
+         setTimeout(() => {
+            window.location.href = "login.html";
+        }, 2500);
+
 
     } catch (error) {
         console.error("Erro na requisição:", error);
+        // Tratamento de erro: exibe a mensagem devolvida pela API ou gerada
+        // pelas validacoes locais.
         alert(error.message);
     }
 }

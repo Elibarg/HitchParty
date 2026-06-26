@@ -1,75 +1,274 @@
-/**
- * ============================================================================
- * CONTROLADOR DE CARONAS (RIDES)
- * ============================================================================
- * Responsável por gerir toda a lógica de negócio relacionada com as viagens.
- * Este ficheiro atua como a "Cozinha" do sistema para o módulo de caronas.
- */
+const caronaService = require('../services/caronaService');
+const rideRequestService = require('../services/rideRequestService');
 
-/**
- * BANCO DE DADOS TEMPORÁRIO (Mock)
- * ----------------------------------------------------------------------------
- * Esta variável simula a tabela 'caronas' do banco de dados MySQL.
- * * [NOTA PARA A EQUIPE DE BANCO DE DADOS]: 
- * Quando o MySQL estiver configurado, apagaremos esta variável e 
- * substituiremos a busca por uma query real (ex: SELECT * FROM caronas).
- * O formato dos dados abaixo é o "contrato" exato que o Front-end espera receber.
- */
-const bancoCaronas = [
-    {
-        id: 1,
-        driver: "Carlos Silva",
-        route: "Joinville → Blumenau",
-        date: "20/06/2026 - 07:10",
-        seats: 2,
-        price: "R$ 25,00"
-    },
-    {
-        id: 2,
-        driver: "Ana Souza",
-        route: "Joinville → Curitiba",
-        date: "21/06/2026 - 08:00",
-        seats: 3,
-        price: "R$ 40,00"
+// HP-BACK-005 | Controller de caronas: traduz params/query/body HTTP para
+// services. Ele nao decide regra de negocio; apenas padroniza status e JSON.
+
+async function buscarCaronas(req, res) {
+    try {
+        const rides = await caronaService.buscarCaronas({
+            origin: req.query.origin,
+            destination: req.query.destination,
+            originLat: req.query.originLat,
+            originLng: req.query.originLng,
+            destinationLat: req.query.destinationLat,
+            destinationLng: req.query.destinationLng
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: { rides }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Erro ao buscar caronas.'
+        });
     }
-];
+}
 
-/**
- * FUNÇÃO: Buscar Caronas (GET)
- * ----------------------------------------------------------------------------
- * Esta função é chamada sempre que o utilizador abre a página de busca.
- * O seu objetivo é recolher as caronas disponíveis e enviá-las para o Front-end.
- * * @param {Object} req - Dados da requisição (Futuramente lerá os filtros de cidade aqui).
- * @param {Object} res - Objeto de resposta para enviar os dados de volta à tela.
- */
-/**
- * FUNÇÃO: Buscar Caronas (GET) com Filtros
- */
-const buscarCaronas = (req, res) => {
-    // 1. Lemos as variáveis que vieram na URL (req.query)
-    // O Front-end envia em inglês (origin, destination)
-    const { origin, destination } = req.query;
-
-    // 2. Começamos com a lista completa de caronas
-    let resultadosFiltrados = bancoCaronas;
-
-    // 3. Se o utilizador pesquisou por Origem, filtramos a lista
-    if (origin) {
-        // Transformamos tudo em minúsculas (toLowerCase) para que "Joinville" e "joinville" funcionem igual
-        resultadosFiltrados = resultadosFiltrados.filter(carona => 
-            carona.route.toLowerCase().includes(origin.toLowerCase())
+async function buscarCaronaPorId(req, res) {
+    try {
+        const ride = await caronaService.buscarPorId(
+            req.params.rideId,
+            req.user?.id
         );
-    }
 
-    // 4. Se o utilizador pesquisou por Destino, filtramos o que sobrou
-    if (destination) {
-        resultadosFiltrados = resultadosFiltrados.filter(carona => 
-            carona.route.toLowerCase().includes(destination.toLowerCase())
+        return res.status(200).json({
+            success: true,
+            data: { ride }
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function listarProximas(req, res) {
+    try {
+        const rides = await caronaService.listarProximasPorUsuario(req.user.id);
+
+        return res.status(200).json({
+            success: true,
+            data: { rides }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Erro ao listar próximas caronas.'
+        });
+    }
+}
+
+async function listarHistorico(req, res) {
+    try {
+        const rides = await caronaService.listarHistoricoPorUsuario(req.user.id);
+
+        return res.status(200).json({
+            success: true,
+            data: { rides }
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Erro ao listar histórico de caronas.'
+        });
+    }
+}
+
+async function listarPassageirosConfirmados(req, res) {
+    try {
+        const passengers = await rideRequestService.listarPassageirosConfirmados(
+            req.params.rideId
         );
-    }
 
-    // 5. Devolvemos apenas as caronas que passaram pelos filtros!
-    return res.status(200).json(resultadosFiltrados);
+        return res.status(200).json({
+            success: true,
+            data: { passengers },
+            passengers
+        });
+    } catch (error) {
+        return res.status(404).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function criarCarona(req, res) {
+    try {
+        // HP-AUTH-008 | O motorista vem do JWT; o front nao controla driver_id.
+        const ride = await caronaService.criarCarona(req.user.id, req.body);
+
+        return res.status(201).json({
+            success: true,
+            message: 'Carona criada com sucesso.',
+            data: { ride }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function editarCarona(req, res) {
+    try {
+        const ride = await caronaService.editarCarona(
+            req.params.rideId,
+            req.user.id,
+            req.body
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Carona atualizada com sucesso.',
+            data: { ride }
+        });
+    } catch (error) {
+        const statusCode = /permissao/i.test(error.message) ? 403 : 400;
+
+        return res.status(statusCode).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function cancelarCarona(req, res) {
+    try {
+        const ride = await caronaService.cancelarCarona(
+            req.params.rideId,
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Carona cancelada com sucesso.',
+            data: { ride }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function confirmarAlteracao(req, res) {
+    try {
+        const ride = await caronaService.aceitarAlteracao(
+            req.params.rideId,
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Alteracao aceita. Voce continua na carona.',
+            data: { ride }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function rejeitarAlteracao(req, res) {
+    try {
+        const ride = await caronaService.rejeitarAlteracao(
+            req.params.rideId,
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: 'Alteracao recusada. Voce saiu da carona.',
+            data: { ride }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function solicitarCarona(req, res) {
+    try {
+        const request = await rideRequestService.solicitarCarona(
+            req.params.rideId,
+            req.user.id,
+            req.body
+        );
+
+        return res.status(201).json({
+            success: true,
+            message: 'Solicitação enviada com sucesso.',
+            data: { request }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function buscarMinhaSolicitacao(req, res) {
+    try {
+        const request = await rideRequestService.buscarMinhaSolicitacao(
+            req.params.rideId,
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            data: { request }
+        });
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+async function listarSolicitacoesDaCarona(req, res) {
+    try {
+        const requests = await rideRequestService.listarPorCarona(
+            req.params.rideId,
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            data: { requests }
+        });
+    } catch (error) {
+        return res.status(403).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+module.exports = {
+    buscarCaronas,
+    listarProximas,
+    listarHistorico,
+    buscarCaronaPorId,
+    listarPassageirosConfirmados,
+    criarCarona,
+    editarCarona,
+    cancelarCarona,
+    confirmarAlteracao,
+    rejeitarAlteracao,
+    solicitarCarona,
+    buscarMinhaSolicitacao,
+    listarSolicitacoesDaCarona
 };
-
-module.exports = { buscarCaronas };

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Validação Concluída | HitchParty
+    </title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/variables.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/global.css">
+
+    <link
+        rel="stylesheet"
+        href="../assets/css/trip-validation.css">
+
+</head>
+
+<body>
+
+    <div id="header-slot"></div>
+
+    <main class="validation-page">
+        <button class="back-button" type="button" onclick="goBack()">← Voltar</button>
+
+
+        <section class="validation-card">
+
+            <div class="validation-success">
+
+                <div class="success-icon">
+
+                    ✓
+
+                </div>
+
+                <h1>
+                    Embarque Validado
+                </h1>
+
+                <p>
+                    Nenhuma validação real foi carregada.
+                </p>
+
+            </div>
+
+            <div class="trip-details">
+
+                <div class="detail-item">
+
+                    <span>
+                        Código
+                    </span>
+
+                    <strong id="tripCode">
+                        --
+                    </strong>
+
+                </div>
+
+                <div class="detail-item">
+
+                    <span>
+                        Passageiro
+                    </span>
+
+                    <strong id="passengerName">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="detail-item">
+
+                    <span>
+                        Motorista
+                    </span>
+
+                    <strong id="driverName">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="detail-item">
+
+                    <span>
+                        Rota
+                    </span>
+
+                    <strong id="tripRoute">
+                        Não informado
+                    </strong>
+
+                </div>
+
+                <div class="detail-item">
+
+                    <span>
+                        Data/Hora
+                    </span>
+
+                    <strong id="validationTime">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <div class="validation-status">
+
+                Status:
+                <strong>
+                    Não validado
+                </strong>
+
+            </div>
+
+            <div class="validation-actions">
+
+                <a
+                    href="history.html"
+                    class="btn btn-primary">
+
+                    Ver Histórico
+
+                </a>
+
+                <a
+                    href="dashboard.html"
+                    class="btn btn-outline-primary">
+
+                    Voltar ao Início
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div id="navbar-slot"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="../assets/js/app.js"></script>
+
+    <script src="../assets/js/trip-validation.js"></script>
+
+</body>
+
+</html>
